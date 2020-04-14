@@ -1,51 +1,31 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using TransportCompany.Order.Infrastructure;
+using TransportCompany.Order.Infrastructure.Persistence;
+using TransportCompany.Shared.ApiInfrastructure;
 
 namespace TransportCompany.Order.WebAPI
 {
-    public class Startup
+    public class Startup: BaseStartup<Startup>
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env) 
+            : base(configuration, env, "Order")
         {
-            Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        protected override void ConfigureDataContext(IServiceCollection services)
         {
-            services.AddControllers();
-        }
+            services.AddDbContext<OrderDbContext>(options => options
+                .UseSqlServer(ConnectionString, sqlServerOptions =>
+                {
+                    sqlServerOptions.MigrationsAssembly("TransportCompany.Order.Infrastructure");
+                    sqlServerOptions.EnableRetryOnFailure(5);
+                }));
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            var dbContext = services.BuildServiceProvider().GetService<OrderDbContext>();
+            dbContext.Database.Migrate();
         }
     }
 }
