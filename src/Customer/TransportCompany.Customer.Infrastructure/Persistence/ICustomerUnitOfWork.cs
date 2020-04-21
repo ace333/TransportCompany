@@ -6,5 +6,6 @@ namespace TransportCompany.Customer.Infrastructure.Persistence
     public interface ICustomerUnitOfWork : IUnitOfWork
     {
         ICustomerRepository CustomerRepository { get; }
+        IRideRepository RideRepository { get; }
     }
 }

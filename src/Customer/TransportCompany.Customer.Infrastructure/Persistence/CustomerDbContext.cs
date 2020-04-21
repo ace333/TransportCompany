@@ -1,12 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using TransportCompany.Customer.Domain.Entities.PaymentMethods;
 using TransportCompany.Customer.Domain.Enums;
+using TransportCompany.Shared.Infrastructure.Persistence;
 
 namespace TransportCompany.Customer.Infrastructure.Persistence
 {
-    public class CustomerDbContext: DbContext
+    public class CustomerDbContext: DbContext// BaseDbContext<CustomerDbContext>
     {
-        public CustomerDbContext(DbContextOptions<CustomerDbContext> options) 
+        //public CustomerDbContext(DbContextOptions<CustomerDbContext> options, IBusControl busControl) 
+        //    : base(options, busControl)
+        //{
+        //}
+
+        public CustomerDbContext(DbContextOptions<CustomerDbContext> options)
             : base(options)
         {
         }
