@@ -7,6 +7,11 @@ namespace TransportCompany.Shared.Domain.Base
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        protected Entity()
+        {
+            CreatedDate = DateTime.Now;
+        }
+
         public override bool Equals(object obj)
         {
             var other = obj as Entity;

@@ -5,6 +5,23 @@ namespace TransportCompany.Shared.Domain.ValueObjects
 {
     public class Address: ValueObject
     {
+        public Address(string street,
+            string houseNumber,
+            string zipCode,
+            string city,
+            string state,
+            string country)
+        {
+            Street = street;
+            HouseNumber = houseNumber;
+            ZipCode = zipCode;
+            City = city;
+            State = state;
+            Country = country;
+        }
+
+        protected Address() { }
+
         public string Street { get; set; }
         public string HouseNumber { get; set; }
         public string ZipCode { get; set; }
