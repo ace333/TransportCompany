@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportCompany.Shared.Inf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportCompany.Shared.ApiInfrastructure", "src\Shared\TransportCompany.Shared.ApiInfrastructure\TransportCompany.Shared.ApiInfrastructure.csproj", "{A55A95B5-9D20-470F-8E70-A23C6C4DCC05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransportCompany.Shared.Application", "src\TransportCompany.Shared.Application\TransportCompany.Shared.Application.csproj", "{7D25CDDD-0634-4277-8298-7687893DE97C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{A55A95B5-9D20-470F-8E70-A23C6C4DCC05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A55A95B5-9D20-470F-8E70-A23C6C4DCC05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A55A95B5-9D20-470F-8E70-A23C6C4DCC05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D25CDDD-0634-4277-8298-7687893DE97C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D25CDDD-0634-4277-8298-7687893DE97C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D25CDDD-0634-4277-8298-7687893DE97C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D25CDDD-0634-4277-8298-7687893DE97C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +150,7 @@ Global
 		{82537B81-11DE-4E94-A11F-5A4EB7F39A90} = {057DB44B-7E8B-4DA4-9E61-CA287156AC6F}
 		{3D8F5786-EFA1-4C59-80E8-E80042226456} = {057DB44B-7E8B-4DA4-9E61-CA287156AC6F}
 		{A55A95B5-9D20-470F-8E70-A23C6C4DCC05} = {057DB44B-7E8B-4DA4-9E61-CA287156AC6F}
+		{7D25CDDD-0634-4277-8298-7687893DE97C} = {057DB44B-7E8B-4DA4-9E61-CA287156AC6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {218E23AD-C83E-4A5F-B8AC-4751B260A88D}
