@@ -17,13 +17,12 @@ namespace TransportCompany.Shared.Infrastructure.Persistence
 
         public async Task CommitAsync() => await _dbContext.SaveChangesAsync();
 
-        public async Task<TEntity> FindAsync<TKey, TEntity>(TKey key) where TEntity : Entity
-            => await _dbContext.FindAsync<TEntity>(key);
-
         public void Add<TEntity>(TEntity entity) where TEntity : Entity
             => _dbContext.Add(entity);
 
         public void Delete<TEntity>(TEntity entity) where TEntity : Entity
             => _dbContext.Remove(entity);
+
+        public void Dispose() => _dbContext?.Dispose();
     }
 }
