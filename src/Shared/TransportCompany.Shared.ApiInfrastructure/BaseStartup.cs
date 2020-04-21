@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Castle.Facilities.AspNetCore;
-using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -10,10 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MassTransit;
-using MediatR;
-using TransportCompany.Shared.Infrastructure.Attributes;
 using TransportCompany.Shared.Infrastructure.Config;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using Scrutor;
+using TransportCompany.Shared.Infrastructure.Model;
 
 namespace TransportCompany.Shared.ApiInfrastructure
 {
@@ -45,24 +46,27 @@ namespace TransportCompany.Shared.ApiInfrastructure
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var assembly = typeof(TStartup).Assembly;
+            ConfigureDataContext(services);
 
-            _container.AddFacility<AspNetCoreFacility>(x => x.CrossWiresInto(services));
-            _container.Register(Classes.FromAssemblyInThisApplication(assembly)
-                .Where(x => x.IsPublic && !HasConsumerAttribute(x))
-                .WithServiceAllInterfaces()
-                .LifestyleScoped());
+            ConfigureInfrastructureLayerServices(services);
+            ConfigureApplicationLayerServices(services);
 
             //_container.ConfigureMassTransit(_rabbitMqConfig, 
             //    ConsumersConfiguration.AddConsumersFromAssemblies(GetReferencedAssemblies(assembly)),
             //    ConsumersConfiguration.RegisterConsumers(_container));
 
-            services.AddMediatR(assembly);
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = _apiName, Version = "v1" }); });
-            services.AddControllers();
-            services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = _apiName, Version = "v1" });
+            });
 
-            ConfigureDataContext(services);
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.Converters.Add(new StringEnumConverter());
+            });
+
+            services.AddRouting(options => options.LowercaseUrls = true);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
@@ -84,6 +88,29 @@ namespace TransportCompany.Shared.ApiInfrastructure
         }
 
         protected abstract void ConfigureDataContext(IServiceCollection services);
+        protected abstract void ConfigureApplicationLayerServices(IServiceCollection services);
+        protected abstract void ConfigureInfrastructureLayerServices(IServiceCollection services);
+
+        protected void RegisterAllServicesScopedFromAssembly(IServiceCollection services, Assembly assembly)
+        {
+            services.Scan(x => x.FromAssemblies(GetAllReferencedAssembliesWithSelf(assembly))
+                .AddClasses(y => y.AssignableTo<IScopedService>())
+                .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+                .AsImplementedInterfaces()
+                .WithScopedLifetime());
+        }
+
+        private Assembly[] GetAllReferencedAssembliesWithSelf(Assembly assembly)
+        {
+            var assemblies = new List<Assembly> {assembly};
+            assemblies.AddRange(
+                assembly.GetReferencedAssemblies()
+                    .Where(x => x.FullName.StartsWith("TransportCompany"))
+                    .Select(Assembly.Load)
+                );
+
+            return assemblies.ToArray();
+        } 
 
         private RabbitMqConfig GetRabbitMqConfig()
         {
@@ -110,12 +137,6 @@ namespace TransportCompany.Shared.ApiInfrastructure
 
             return $"Server={sqlConfig.Server};Database={sqlConfig.Database};User Id={sqlConfig.Username};Password={sqlConfig.Password};";
         }
-
-        private Assembly[] GetReferencedAssemblies(Assembly assembly)
-            => assembly.GetReferencedAssemblies().Select(Assembly.Load).ToArray();
-
-        private bool HasConsumerAttribute(Type type) =>
-            type.GetCustomAttributes(typeof(ConsumerAttribute), true).Length > 0;
 
         private Action<IApplicationBuilder> ApplicationStarted => (app) =>
         {
