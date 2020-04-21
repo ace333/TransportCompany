@@ -4,4 +4,16 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\TransportCompany.Shared.Domain\TransportCompany.Shared.Domain.csproj" />
+    <ProjectReference Include="..\..\TransportCompany.Shared.Application\TransportCompany.Shared.Application.csproj" />
+    <ProjectReference Include="..\TransportCompany.Customer.Domain\TransportCompany.Customer.Domain.csproj" />
+    <ProjectReference Include="..\TransportCompany.Customer.Infrastructure\TransportCompany.Customer.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
