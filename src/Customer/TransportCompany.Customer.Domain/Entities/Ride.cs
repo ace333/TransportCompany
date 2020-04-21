@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TransportCompany.Customer.Domain.Enums;
 using TransportCompany.Customer.Domain.ValueObjects;
 using TransportCompany.Shared.Domain.Base;
@@ -18,5 +19,9 @@ namespace TransportCompany.Customer.Domain.Entities
 
         public Customer Customer { get; set; }
         public ICollection<Route> Routes { get; set; }
+
+        public void AddRoute(Route route) => Routes.Add(route);
+        public void RemoveRoute(Route route) => Routes.Remove(route);
+        public Route GetRoute(int routeId) => Routes.SingleOrDefault(x => x.Id == routeId);
     }
 }
