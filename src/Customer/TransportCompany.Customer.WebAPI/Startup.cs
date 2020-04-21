@@ -1,3 +1,6 @@
+using System.Reflection;
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +28,21 @@ namespace TransportCompany.Customer.WebAPI
 
             var dbContext = services.BuildServiceProvider().GetService<CustomerDbContext>();
             dbContext.Database.Migrate();
+        }
+
+        protected override void ConfigureApplicationLayerServices(IServiceCollection services)
+        {
+            var applicationLayerAssembly = Assembly.Load("TransportCompany.Customer.Application");
+            RegisterAllServicesScopedFromAssembly(services, applicationLayerAssembly);
+
+            services.AddMediatR(applicationLayerAssembly);
+            services.AddAutoMapper(applicationLayerAssembly);
+        }
+
+        protected override void ConfigureInfrastructureLayerServices(IServiceCollection services)
+        {
+            var infrastructureLayerAssembly = Assembly.GetAssembly(typeof(CustomerDbContext));
+            RegisterAllServicesScopedFromAssembly(services, infrastructureLayerAssembly);
         }
     }
 }
