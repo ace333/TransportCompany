@@ -27,6 +27,13 @@ namespace TransportCompany.Customer.WebAPI.Controllers
             return await Mediator.Send(query);
         }
 
+        [HttpPost("{id}/rides")]
+        public async Task RequestRide(int id, [FromBody] RequestRideCommand command)
+        {
+            command.SetId(id);
+            await Mediator.Send(command);
+        }
+
         [HttpGet("{id}/rides")]
         public async Task<PaginatedList<CustomerRidesQueryDto>> GetCustomerRide(int id, [FromQuery] CustomerRidesQuery query)
         {
@@ -55,6 +62,13 @@ namespace TransportCompany.Customer.WebAPI.Controllers
         {
             query.SetId(id);
             return await Mediator.Send(query);
+        }
+
+        [HttpPatch("{id}/rides/{rideId}/cancel")]
+        public async Task CancelCurrentRide(int id, [FromBody] CancelRideCommand command)
+        {
+            command.SetId(id);
+            await Mediator.Send(command);
         }
 
         [HttpGet("{id}/photo")]
