@@ -1,3 +1,5 @@
+using System.Reflection;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +28,20 @@ namespace TransportCompany.Order.WebAPI
 
             var dbContext = services.BuildServiceProvider().GetService<OrderDbContext>();
             dbContext.Database.Migrate();
+        }
+
+        protected override void ConfigureApplicationLayerServices(IServiceCollection services)
+        {
+            var applicationLayerAssembly = Assembly.Load("TransportCompany.Order.Application");
+            RegisterAllServicesScopedFromAssembly(services, applicationLayerAssembly);
+
+            services.AddMediatR(applicationLayerAssembly);
+        }
+
+        protected override void ConfigureInfrastructureLayerServices(IServiceCollection services)
+        {
+            var infrastructureLayerAssembly = Assembly.GetAssembly(typeof(OrderDbContext));
+            RegisterAllServicesScopedFromAssembly(services, infrastructureLayerAssembly);
         }
     }
 }
