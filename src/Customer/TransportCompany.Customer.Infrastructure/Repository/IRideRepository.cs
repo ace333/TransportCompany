@@ -6,6 +6,6 @@ namespace TransportCompany.Customer.Infrastructure.Repository
 {
     public interface IRideRepository: IRepository<Ride>
     {
-        IQueryable<Ride> GetRidesByCustomerId(int customerId);
+        IQueryable<Ride> GetFinishedRidesByCustomerId(int customerId);
     }
 }
