@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TransportCompany.Driver.Domain.Enums;
 using TransportCompany.Driver.Domain.ValueObjects;
 using TransportCompany.Shared.Domain.Base;
@@ -16,5 +17,19 @@ namespace TransportCompany.Driver.Domain.Entities
         public DriverPriority Priority { get; set; }
 
         public ICollection<Ride> Rides { get; set; }
+
+        public void AddRide(Ride ride)
+        {
+            if (Rides == null) Rides = new List<Ride>();
+
+            Rides.Add(ride);
+        }
+
+        public void UpdateGrade(decimal grade) => SystemInfo.Grade = grade;
+        public Ride GetCurrentRideWhenNoCustomerPickedUp()
+            => Rides.SingleOrDefault(x => x.Status == RideStatus.OnTheWayToCustomer);
+        public Ride GetCurrentRide() => Rides.SingleOrDefault(x => x.Status == RideStatus.OnGoing);
+        public Ride GetLastRide()
+            => Rides.OrderByDescending(x => x.CreatedDate).FirstOrDefault(x => x.Status == RideStatus.Completed);
     }
 }
