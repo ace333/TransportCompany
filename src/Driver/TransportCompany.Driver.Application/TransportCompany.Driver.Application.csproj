@@ -4,4 +4,18 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="QueryHandlers\" />
+    <Folder Include="Query\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\TransportCompany.Shared.Application\TransportCompany.Shared.Application.csproj" />
+    <ProjectReference Include="..\TransportCompany.Driver.Infrastructure\TransportCompany.Driver.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
