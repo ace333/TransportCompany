@@ -2,9 +2,9 @@
 using System.Linq;
 using TransportCompany.Customer.Domain.Entities.PaymentMethods;
 using TransportCompany.Customer.Domain.Enums;
+using TransportCompany.Customer.Domain.ValueObjects;
 using TransportCompany.Shared.Domain.Base;
 using TransportCompany.Shared.Domain.Enums;
-using TransportCompany.Shared.Domain.ValueObjects;
 
 namespace TransportCompany.Customer.Domain.Entities
 {
@@ -17,7 +17,16 @@ namespace TransportCompany.Customer.Domain.Entities
         public ICollection<Ride> Rides { get; set; }
         public ICollection<PaymentMethod> PaymentMethods { get; set; }
 
+        public void AddRide(Ride ride)
+        {
+            if (!Rides.Any()) Rides = new List<Ride>();
+            Rides.Add(ride);
+        }
+
+        public void UpdateGrade(decimal grade) => SystemInfo.Grade = grade;
         public Ride GetCurrentRide() => Rides.SingleOrDefault(x => x.Status == RideStatus.OnGoing);
+        public Ride GetLastRide() => Rides.OrderByDescending(x => x.CreatedDate)
+            .FirstOrDefault(x => x.Status == RideStatus.Completed);
 
         protected Customer()
         {
