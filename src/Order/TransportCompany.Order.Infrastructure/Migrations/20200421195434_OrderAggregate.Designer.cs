@@ -5,13 +5,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TransportCompany.Order.Infrastructure;
 using TransportCompany.Order.Infrastructure.Persistence;
 
 namespace TransportCompany.Order.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20200405151540_OrderAggregate")]
+    [Migration("20200421195434_OrderAggregate")]
     partial class OrderAggregate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +61,11 @@ namespace TransportCompany.Order.Infrastructure.Migrations
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
 
                             b1.Property<decimal>("GrossValue")
                                 .HasColumnType("decimal(18,2)");

@@ -22,6 +22,10 @@ namespace TransportCompany.Order.Infrastructure.Configurations
 
             builder.OwnsOne(x => x.PaymentAmount, y =>
             {
+                y.Property(x => x.Currency)
+                    .HasMaxLength(64)
+                    .IsRequired();
+
                 y.Property(x => x.NetValue);
                 y.Property(x => x.GrossValue);
                 y.Property(x => x.Tax);

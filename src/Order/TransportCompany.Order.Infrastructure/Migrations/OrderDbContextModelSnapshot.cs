@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TransportCompany.Order.Infrastructure;
 using TransportCompany.Order.Infrastructure.Persistence;
 
 namespace TransportCompany.Order.Infrastructure.Migrations
@@ -60,6 +59,11 @@ namespace TransportCompany.Order.Infrastructure.Migrations
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
 
                             b1.Property<decimal>("GrossValue")
                                 .HasColumnType("decimal(18,2)");

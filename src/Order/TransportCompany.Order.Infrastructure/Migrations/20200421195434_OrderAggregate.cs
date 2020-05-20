@@ -18,6 +18,7 @@ namespace TransportCompany.Order.Infrastructure.Migrations
                     Comments = table.Column<string>(maxLength: 255, nullable: true),
                     CustomerId = table.Column<int>(nullable: false),
                     DriverId = table.Column<int>(nullable: false),
+                    PaymentAmount_Currency = table.Column<string>(maxLength: 64, nullable: true),
                     PaymentAmount_NetValue = table.Column<decimal>(nullable: true),
                     PaymentAmount_GrossValue = table.Column<decimal>(nullable: true),
                     PaymentAmount_Tax = table.Column<int>(nullable: true),
