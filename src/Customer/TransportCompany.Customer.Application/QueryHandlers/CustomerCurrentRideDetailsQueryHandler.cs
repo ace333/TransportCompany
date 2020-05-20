@@ -5,6 +5,7 @@ using AutoMapper;
 using TransportCompany.Customer.Application.Dto;
 using TransportCompany.Customer.Application.Query;
 using TransportCompany.Customer.Infrastructure.Persistence;
+using TransportCompany.Shared.Application.Dto;
 using TransportCompany.Shared.Application.Query;
 using TransportCompany.Shared.Application.Utils;
 

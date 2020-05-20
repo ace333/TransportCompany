@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using MediatR;
 using TransportCompany.Customer.Application.Command;
-using TransportCompany.Customer.Application.Dto;
-using TransportCompany.Customer.Application.Events;
 using TransportCompany.Customer.Domain.Entities;
+using TransportCompany.Customer.Domain.Events;
 using TransportCompany.Customer.Domain.Services;
 using TransportCompany.Customer.Infrastructure.Persistence;
 using TransportCompany.Shared.Application.Command;
+using TransportCompany.Shared.Application.Dto;
 using TransportCompany.Shared.Application.Utils;
 using TransportCompany.Shared.Domain.ValueObjects;
 
@@ -37,13 +37,14 @@ namespace TransportCompany.Customer.Application.CommandHandlers
             var destinationPointAddress = CreateAddressFromDto(request.DestinationPoint);
 
             _rideService.AddRoute(ride, new Route(startPointAddress, destinationPointAddress));
-            customer.AddDomainEvent(new RouteAdded(startPointAddress, destinationPointAddress));
+            customer.AddDomainEvent(new RouteAdded(ride.DriverId, startPointAddress, destinationPointAddress));
 
             await _customerUnitOfWork.CommitAsync();
 
             return Unit.Value;
         }
 
+        // TO DO : automapper
         private Address CreateAddressFromDto(AddressDto addressDto)
             => new Address(
                 addressDto.HouseNumber,

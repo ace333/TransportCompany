@@ -9,24 +9,26 @@ using TransportCompany.Shared.Application.Utils;
 
 namespace TransportCompany.Customer.Application.CommandHandlers
 {
-    public class RateDriverCommandHandler : ICommandHandler<RateDriverCommand>
+    public class CancelRideCommandHandler : ICommandHandler<CancelRideCommand>
     {
         private readonly ICustomerUnitOfWork _unitOfWork;
 
-        public RateDriverCommandHandler(ICustomerUnitOfWork unitOfWork)
+        public CancelRideCommandHandler(ICustomerUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Unit> Handle(RateDriverCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CancelRideCommand request, CancellationToken cancellationToken)
         {
             var customer = await _unitOfWork.CustomerRepository.GetCustomerWithRides(request.Id);
             Fail.IfNull(customer, request.Id);
 
-            var lastRide = customer.GetLastRide();
-            customer.AddDomainEvent(new DriverRated(lastRide.DriverId, request.Grade));
+            var ride = customer.GetCurrentRide();
+            ride.Cancel();
 
+            customer.AddDomainEvent(new RideCancelled(customer.Id, request.Comments));
             await _unitOfWork.CommitAsync();
+
             return Unit.Value;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TransportCompany.Shared.Application.Dto;
 
 namespace TransportCompany.Customer.Application.Dto.Base
 {

@@ -2,8 +2,8 @@
 
 namespace TransportCompany.Customer.Application.Command
 {
-    public class RateDriverCommand : IdCommand, ICommand
+    public sealed class CancelRideCommand: IdCommand, ICommand
     {
-        public decimal Grade { get; set; }
+        public string Comments { get; set; }
     }
 }

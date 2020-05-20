@@ -6,6 +6,7 @@ using AutoMapper;
 using TransportCompany.Customer.Application.Dto;
 using TransportCompany.Customer.Application.Query;
 using TransportCompany.Customer.Infrastructure.Persistence;
+using TransportCompany.Shared.Application.Dto;
 using TransportCompany.Shared.Application.Query;
 using TransportCompany.Shared.Infrastructure.Extensions;
 using TransportCompany.Shared.Infrastructure.Model;
@@ -25,10 +26,10 @@ namespace TransportCompany.Customer.Application.QueryHandlers
 
         public async Task<PaginatedList<CustomerRidesQueryDto>> Handle(CustomerRidesQuery request, CancellationToken cancellationToken)
         {
-            return await _customerUnitOfWork.RideRepository.GetRidesByCustomerId(request.Id)
+            return await _customerUnitOfWork.RideRepository.GetFinishedRidesByCustomerId(request.Id)
                 .Select(x => new CustomerRidesQueryDto
                 {
-                    FinishedDate = x.FinishedDate,
+                    FinishedDate = x.FinishedDate.Value,
                     DriverDetails = _mapper.Map<DriverDetailsDto>(x.DriverDetails),
                     Routes = _mapper.Map<List<AddressDto>>(x.Routes),
                     Price = _mapper.Map<MoneyDto>(x.Price)

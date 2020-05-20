@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using TransportCompany.Customer.Application.Command;
-using TransportCompany.Customer.Application.Events;
+using TransportCompany.Customer.Domain.Events;
 using TransportCompany.Customer.Domain.Services;
 using TransportCompany.Customer.Infrastructure.Persistence;
 using TransportCompany.Shared.Application.Command;
@@ -33,7 +33,7 @@ namespace TransportCompany.Customer.Application.CommandHandlers
             Fail.IfNull(routeToDelete, request.RouteId);
 
             _rideService.RemoveRoute(ride, routeToDelete);
-            customer.AddDomainEvent(new RouteDeleted(routeToDelete.StartPoint, routeToDelete.Destination));
+            customer.AddDomainEvent(new RouteDeleted(ride.DriverId, routeToDelete.StartPoint));
 
             await _customerUnitOfWork.CommitAsync();
 
