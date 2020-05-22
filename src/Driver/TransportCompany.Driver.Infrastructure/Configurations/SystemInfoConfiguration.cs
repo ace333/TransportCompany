@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TransportCompany.Customer.Domain.ValueObjects;
+using TransportCompany.Driver.Domain.ValueObjects;
 using TransportCompany.Shared.Domain.Base;
 
 namespace TransportCompany.Driver.Infrastructure.Configurations

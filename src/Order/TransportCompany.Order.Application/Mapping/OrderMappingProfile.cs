@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using TransportCompany.Order.Domain.ValueObjects;
-using TransportCompany.Shared.Application.Dto;
 using TransportCompany.Shared.Domain.ValueObjects;
 
 namespace TransportCompany.Customer.Application.Mapping

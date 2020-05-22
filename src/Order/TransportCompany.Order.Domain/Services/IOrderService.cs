@@ -5,7 +5,7 @@ using TransportCompany.Shared.Infrastructure.Model;
 
 namespace TransportCompany.Order.Domain.Services
 {
-    public interface IOrderService : IScopedService
+    public interface IOrderService : IDomainService
     {
         PaymentAmount GetPaymentAmount(
             string startStreetHouseNumber, 

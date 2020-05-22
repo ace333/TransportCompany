@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\TransportCompany.Shared.Application\TransportCompany.Shared.Application.csproj" />
     <ProjectReference Include="..\TransportCompany.Driver.Infrastructure\TransportCompany.Driver.Infrastructure.csproj" />
   </ItemGroup>
 

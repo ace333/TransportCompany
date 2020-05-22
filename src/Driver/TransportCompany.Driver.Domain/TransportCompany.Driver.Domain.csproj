@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Customer\TransportCompany.Customer.Domain\TransportCompany.Customer.Domain.csproj" />
     <ProjectReference Include="..\..\Shared\TransportCompany.Shared.Domain\TransportCompany.Shared.Domain.csproj" />
+    <ProjectReference Include="..\..\Shared\TransportCompany.Shared.Infrastructure\TransportCompany.Shared.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

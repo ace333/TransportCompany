@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\TransportCompany.Shared.Application\TransportCompany.Shared.Application.csproj" />
     <ProjectReference Include="..\..\Shared\TransportCompany.Shared.Domain\TransportCompany.Shared.Domain.csproj" />
-    <ProjectReference Include="..\..\TransportCompany.Shared.Application\TransportCompany.Shared.Application.csproj" />
     <ProjectReference Include="..\TransportCompany.Customer.Domain\TransportCompany.Customer.Domain.csproj" />
     <ProjectReference Include="..\TransportCompany.Customer.Infrastructure\TransportCompany.Customer.Infrastructure.csproj" />
   </ItemGroup>
