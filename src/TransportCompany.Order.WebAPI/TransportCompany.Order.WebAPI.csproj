@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>042648d3-6a9c-482b-8fb6-67fb6cf7883d</UserSecretsId>
+    <AssemblyName>TransportCompany.Order.WebApi</AssemblyName>
+    <RootNamespace>TransportCompany.Order.WebApi</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TransportCompany.Order.Application\TransportCompany.Order.Application.csproj" />
+    <ProjectReference Include="..\TransportCompany.Order.Infrastructure\TransportCompany.Order.Infrastructure.csproj" />
+    <ProjectReference Include="..\TransportCompany.Shared.ApiInfrastructure\TransportCompany.Shared.ApiInfrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
