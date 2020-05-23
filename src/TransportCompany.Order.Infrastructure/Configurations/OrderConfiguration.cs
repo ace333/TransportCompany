@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TransportCompany.Shared.Infrastructure.Configurations;
 
 namespace TransportCompany.Order.Infrastructure.Configurations
@@ -26,8 +27,12 @@ namespace TransportCompany.Order.Infrastructure.Configurations
                     .HasMaxLength(64)
                     .IsRequired();
 
-                y.Property(x => x.NetValue);
-                y.Property(x => x.GrossValue);
+                y.Property(x => x.NetValue)
+                    .HasColumnType("decimal(18, 2)");
+
+                y.Property(x => x.GrossValue)
+                    .HasColumnType("decimal(18, 2)");
+
                 y.Property(x => x.Tax);
             });
         }

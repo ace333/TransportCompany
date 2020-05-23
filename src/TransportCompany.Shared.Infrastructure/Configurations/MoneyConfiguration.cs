@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TransportCompany.Shared.Domain.Base;
 using TransportCompany.Shared.Domain.ValueObjects;
 
@@ -14,6 +15,7 @@ namespace TransportCompany.Shared.Infrastructure.Configurations
                 .IsRequired();
 
             builder.Property(x => x.Amount)
+                .HasColumnType("decimal(18, 2)")
                 .IsRequired();
         }
     }

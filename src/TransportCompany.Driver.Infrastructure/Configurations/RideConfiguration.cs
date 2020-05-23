@@ -18,16 +18,8 @@ namespace TransportCompany.Driver.Infrastructure.Configurations
             builder.OwnsOne(x => x.Invoice, InvoiceConfiguration.Configure);
             builder.OwnsOne(x => x.Income, MoneyConfiguration.Configure);
 
-            builder.OwnsOne(x => x.CustomerDetails, y =>
-            {
-                y.Property(x => x.Name)
-                    .HasMaxLength(64);
-
-                y.Property(x => x.PhoneNumber)
-                    .HasMaxLength(64);
-
-                y.Property(x => x.Grade);
-            });
+            builder.Property(x => x.CustomerId);
+            builder.OwnsOne(x => x.CustomerDetails, CustomerDetailsConfiguration.Configure);
 
             builder.HasOne(x => x.Driver)
                 .WithMany(x => x.Rides);

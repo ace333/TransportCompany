@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TransportCompany.Customer.Domain.Enums;
-using TransportCompany.Customer.Infrastructure;
 using TransportCompany.Customer.Infrastructure.Persistence;
 
 namespace TransportCompany.Customer.Infrastructure.Migrations
@@ -106,13 +105,16 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FinishedDate")
+                    b.Property<int>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("FinishedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
@@ -189,7 +191,7 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
 
             modelBuilder.Entity("TransportCompany.Customer.Domain.Entities.Customer", b =>
                 {
-                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.PersonalInfo", "PersonalInfo", b1 =>
+                    b.OwnsOne("TransportCompany.Customer.Domain.ValueObjects.PersonalInfo", "PersonalInfo", b1 =>
                         {
                             b1.Property<int>("CustomerId")
                                 .ValueGeneratedOnAdd()
@@ -228,7 +230,7 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                                 .HasForeignKey("CustomerId");
                         });
 
-                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.SystemInfo", "SystemInfo", b1 =>
+                    b.OwnsOne("TransportCompany.Customer.Domain.ValueObjects.SystemInfo", "SystemInfo", b1 =>
                         {
                             b1.Property<int>("CustomerId")
                                 .ValueGeneratedOnAdd()
@@ -236,9 +238,9 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<decimal>("Grade")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18, 2)");
 
-                            b1.Property<DateTime>("UpdatedDate")
+                            b1.Property<DateTime?>("UpdatedDate")
                                 .ValueGeneratedOnUpdate()
                                 .HasColumnType("datetime2");
 
@@ -327,10 +329,18 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                                 .HasColumnType("nvarchar(64)")
                                 .HasMaxLength(64);
 
+                            b1.Property<string>("CarRegistrationPlateNumber")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
                             b1.Property<decimal>("Grade")
                                 .HasColumnType("decimal(18,2)");
 
                             b1.Property<string>("Name")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("PhoneNumber")
                                 .HasColumnType("nvarchar(64)")
                                 .HasMaxLength(64);
 

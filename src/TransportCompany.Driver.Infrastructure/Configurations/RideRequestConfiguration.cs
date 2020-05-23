@@ -17,17 +17,7 @@ namespace TransportCompany.Driver.Infrastructure.Configurations
 
             builder.OwnsOne(x => x.StartPoint, AddressConfiguration.Configure);
             builder.OwnsOne(x => x.DestinationPoint, AddressConfiguration.Configure);
-
-            builder.OwnsOne(x => x.CustomerDetails, y =>
-            {
-                y.Property(x => x.Name)
-                    .HasMaxLength(64);
-
-                y.Property(x => x.PhoneNumber)
-                    .HasMaxLength(64);
-
-                y.Property(x => x.Grade);
-            });
+            builder.OwnsOne(x => x.CustomerDetails, CustomerDetailsConfiguration.Configure);
         }
     }
 }

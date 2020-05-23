@@ -17,18 +17,26 @@ namespace TransportCompany.Customer.Infrastructure.Configurations
                 .ValueGeneratedOnUpdate();
 
             builder.OwnsOne(x => x.Price, MoneyConfiguration.Configure);
-
             builder.OwnsOne(x => x.Invoice, InvoiceConfiguration.Configure);
 
+            builder.Property(x => x.DriverId);
             builder.OwnsOne(x => x.DriverDetails, y =>
             {
                 y.Property(x => x.Name)
                     .HasMaxLength(64);
 
+                y.Property(x => x.PhoneNumber)
+                    .HasMaxLength(64);
+
                 y.Property(x => x.CarModel)
                     .HasMaxLength(64);
 
-                y.Property(x => x.Grade);
+                y.Property(x => x.CarRegistrationPlateNumber)
+                    .HasMaxLength(64);
+
+                y.Property(x => x.Grade)
+                    .HasColumnType("decimal(18,2)"); 
+
                 y.Property(x => x.Photo);
             });
 

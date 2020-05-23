@@ -66,10 +66,10 @@ namespace TransportCompany.Order.Infrastructure.Migrations
                                 .HasMaxLength(64);
 
                             b1.Property<decimal>("GrossValue")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18, 2)");
 
                             b1.Property<decimal>("NetValue")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18, 2)");
 
                             b1.Property<int>("Tax")
                                 .HasColumnType("int");

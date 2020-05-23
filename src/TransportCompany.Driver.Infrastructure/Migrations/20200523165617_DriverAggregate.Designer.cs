@@ -5,13 +5,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TransportCompany.Driver.Infrastructure;
 using TransportCompany.Driver.Infrastructure.Persistence;
 
 namespace TransportCompany.Driver.Infrastructure.Migrations
 {
     [DbContext(typeof(DriverDbContext))]
-    [Migration("20200405141331_DriverAggregate")]
+    [Migration("20200523165617_DriverAggregate")]
     partial class DriverAggregate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +41,7 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -82,13 +81,16 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("DriverId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
@@ -97,6 +99,32 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                     b.HasIndex("DriverId");
 
                     b.ToTable("Ride");
+                });
+
+            modelBuilder.Entity("TransportCompany.Driver.Domain.Entities.RideRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RideRequest");
                 });
 
             modelBuilder.Entity("TransportCompany.Driver.Domain.Entities.DestinationPoint", b =>
@@ -300,7 +328,7 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                                 .HasForeignKey("DriverId");
                         });
 
-                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.PersonalInfo", "PersonalInfo", b1 =>
+                    b.OwnsOne("TransportCompany.Driver.Domain.ValueObjects.PersonalInfo", "PersonalInfo", b1 =>
                         {
                             b1.Property<int>("DriverId")
                                 .ValueGeneratedOnAdd()
@@ -339,7 +367,7 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                                 .HasForeignKey("DriverId");
                         });
 
-                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.SystemInfo", "SystemInfo", b1 =>
+                    b.OwnsOne("TransportCompany.Driver.Domain.ValueObjects.SystemInfo", "SystemInfo", b1 =>
                         {
                             b1.Property<int>("DriverId")
                                 .ValueGeneratedOnAdd()
@@ -347,9 +375,9 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<decimal>("Grade")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18, 2)");
 
-                            b1.Property<DateTime>("UpdatedDate")
+                            b1.Property<DateTime?>("UpdatedDate")
                                 .ValueGeneratedOnUpdate()
                                 .HasColumnType("datetime2");
 
@@ -377,9 +405,13 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<decimal>("Grade")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18, 2)");
 
                             b1.Property<string>("Name")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("PhoneNumber")
                                 .HasColumnType("nvarchar(64)")
                                 .HasMaxLength(64);
 
@@ -425,7 +457,7 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18, 2)");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
@@ -438,6 +470,119 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("RideId");
+                        });
+                });
+
+            modelBuilder.Entity("TransportCompany.Driver.Domain.Entities.RideRequest", b =>
+                {
+                    b.OwnsOne("TransportCompany.Driver.Domain.ValueObjects.CustomerDetails", "CustomerDetails", b1 =>
+                        {
+                            b1.Property<int>("RideRequestId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int")
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<decimal>("Grade")
+                                .HasColumnType("decimal(18, 2)");
+
+                            b1.Property<string>("Name")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("PhoneNumber")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.HasKey("RideRequestId");
+
+                            b1.ToTable("RideRequest");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RideRequestId");
+                        });
+
+                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.Address", "DestinationPoint", b1 =>
+                        {
+                            b1.Property<int>("RideRequestId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int")
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("HouseNumber")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("State")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("ZipCode")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.HasKey("RideRequestId");
+
+                            b1.ToTable("RideRequest");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RideRequestId");
+                        });
+
+                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.Address", "StartPoint", b1 =>
+                        {
+                            b1.Property<int>("RideRequestId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int")
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("HouseNumber")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("State")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.Property<string>("ZipCode")
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
+
+                            b1.HasKey("RideRequestId");
+
+                            b1.ToTable("RideRequest");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RideRequestId");
                         });
                 });
 #pragma warning restore 612, 618

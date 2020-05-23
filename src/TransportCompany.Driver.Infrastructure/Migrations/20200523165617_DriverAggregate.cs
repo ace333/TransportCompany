@@ -20,7 +20,7 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                     PersonalInfo_PhoneNumber = table.Column<string>(maxLength: 64, nullable: true),
                     PersonalInfo_Email = table.Column<string>(maxLength: 64, nullable: true),
                     PersonalInfo_Nationality = table.Column<int>(nullable: true),
-                    SystemInfo_Grade = table.Column<decimal>(nullable: true),
+                    SystemInfo_Grade = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     SystemInfo_UpdatedDate = table.Column<DateTime>(nullable: true),
                     DriversLicense_Number = table.Column<string>(maxLength: 64, nullable: true),
                     DriversLicense_DateOfIssue = table.Column<DateTime>(nullable: true),
@@ -47,6 +47,37 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RideRequest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    CustomerId = table.Column<int>(nullable: false),
+                    CustomerDetails_Name = table.Column<string>(maxLength: 64, nullable: true),
+                    CustomerDetails_PhoneNumber = table.Column<string>(maxLength: 64, nullable: true),
+                    CustomerDetails_Grade = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
+                    StartPoint_Street = table.Column<string>(maxLength: 64, nullable: true),
+                    StartPoint_HouseNumber = table.Column<string>(maxLength: 64, nullable: true),
+                    StartPoint_ZipCode = table.Column<string>(maxLength: 64, nullable: true),
+                    StartPoint_City = table.Column<string>(maxLength: 64, nullable: true),
+                    StartPoint_State = table.Column<string>(maxLength: 64, nullable: true),
+                    StartPoint_Country = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_Street = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_HouseNumber = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_ZipCode = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_City = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_State = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_Country = table.Column<string>(maxLength: 64, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RideRequest", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Ride",
                 columns: table => new
                 {
@@ -54,11 +85,13 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: true),
                     Income_Currency = table.Column<string>(maxLength: 64, nullable: true),
-                    Income_Amount = table.Column<decimal>(nullable: true),
+                    Income_Amount = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
+                    CustomerId = table.Column<int>(nullable: false),
                     CustomerDetails_Name = table.Column<string>(maxLength: 64, nullable: true),
-                    CustomerDetails_Grade = table.Column<decimal>(nullable: true),
+                    CustomerDetails_PhoneNumber = table.Column<string>(maxLength: 64, nullable: true),
+                    CustomerDetails_Grade = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     Invoice_Name = table.Column<string>(maxLength: 255, nullable: true),
                     Invoice_CreatedDate = table.Column<DateTime>(nullable: true),
                     Invoice_Content = table.Column<byte[]>(nullable: true),
@@ -90,7 +123,7 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                     Address_Country = table.Column<string>(maxLength: 64, nullable: true),
                     Status = table.Column<int>(nullable: false),
                     Type = table.Column<int>(nullable: false),
-                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: true),
                     RideId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -119,6 +152,9 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "DestinationPoint");
+
+            migrationBuilder.DropTable(
+                name: "RideRequest");
 
             migrationBuilder.DropTable(
                 name: "Ride");
