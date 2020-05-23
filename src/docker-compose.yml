@@ -1,0 +1,75 @@
+version: '3'
+
+services:
+  mssql:
+    restart: always
+    env_file:
+      - TransportCompany.Shared.Infrastructure/.env-infrastructure
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"
+    networks:
+      - transport_company_network
+
+  rabbitmq:
+    restart: always
+    env_file:
+      - TransportCompany.Shared.Infrastructure/.env-infrastructure
+    image: rabbitmq:3.8.3-management
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - transport_company_network
+
+  customer:
+    restart: always
+    env_file:
+      - TransportCompany.Customer.WebAPI/.env-customer
+    build:
+      context: .
+      dockerfile: Customer.Dockerfile
+    image: transport-company-customer
+    ports:
+      - "5100:5100"
+    networks:
+      - transport_company_network
+    depends_on: 
+      - mssql
+      - rabbitmq
+
+  driver:
+    restart: always
+    env_file:
+      - TransportCompany.Driver.WebAPI/.env-driver
+    build:
+      context: .
+      dockerfile: Driver.Dockerfile
+    image: transport-company-driver
+    ports:
+      - "5200:5200"
+    networks:
+      - transport_company_network
+    depends_on: 
+      - mssql
+      - rabbitmq
+
+  order:
+    restart: always
+    env_file:
+      - TransportCompany.Order.WebAPI/.env-order
+    build:
+      context: .
+      dockerfile: Order.Dockerfile
+    image: transport-company-order
+    ports:
+      - "5300:5300"
+    networks:
+      - transport_company_network
+    depends_on: 
+      - mssql
+      - rabbitmq
+
+networks:
+  transport_company_network:
+    driver: bridge
