@@ -5,9 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Windsor" Version="5.0.1" />
-    <PackageReference Include="Castle.Facilities.AspNetCore" Version="5.0.1" />
-    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="1.1.0" />
     <PackageReference Include="MassTransit.CastleWindsor" Version="6.2.3" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="6.2.3" />
     <PackageReference Include="MediatR" Version="8.0.1" />
