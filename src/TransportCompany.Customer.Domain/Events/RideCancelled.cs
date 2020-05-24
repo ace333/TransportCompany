@@ -1,16 +1,19 @@
-﻿using TransportCompany.Shared.Domain.Events;
+﻿using TransportCompany.Shared.Domain.Enums;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Customer.Domain.Events
 {
-    public sealed class RideCancelled : IDomainEvent
+    public sealed class RideCancelled : IOrderCancelled
     {
         public RideCancelled(int customerId, string comments)
         {
-            CustomerId = customerId;
+            RequestorId = customerId;
+            RequestorType = RequestorType.Customer;
             Comments = comments;
-        }        
+        }
 
-        public int CustomerId { get; }
-        public string Comments { get; }
+        public int RequestorId { get; }
+        public RequestorType RequestorType { get; }
+        public string Comments { get; } 
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using TransportCompany.Driver.Domain.ValueObjects;
 using TransportCompany.Shared.Application.Dto;
 using TransportCompany.Shared.Domain.ValueObjects;
 

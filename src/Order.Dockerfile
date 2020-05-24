@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /src
 
 COPY TransportCompany.Shared.Domain/. ./TransportCompany.Shared.Domain
+COPY TransportCompany.Shared.EventStore/. ./TransportCompany.Shared.EventStore
 COPY TransportCompany.Shared.Infrastructure/. ./TransportCompany.Shared.Infrastructure
 COPY TransportCompany.Shared.Application/. ./TransportCompany.Shared.Application
 COPY TransportCompany.Shared.ApiInfrastructure/. ./TransportCompany.Shared.ApiInfrastructure

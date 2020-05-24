@@ -2,14 +2,14 @@
 using MassTransit;
 using System.Threading.Tasks;
 using TransportCompany.Order.Domain.Events;
-using TransportCompany.Order.Domain.Events.Consumed;
 using TransportCompany.Order.Domain.Services;
 using TransportCompany.Order.Infrastructure.Persistence;
 using TransportCompany.Shared.Domain.ValueObjects;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Order.Application.Consumers
 {
-    public class AvailableDriverFoundConsumer : IConsumer<AvailableDriverFound>
+    public class AvailableDriverFoundConsumer : IConsumer<IAvailableDriverFound>
     {
         private readonly IOrderUnitOfWork _unitOfWork;
         private readonly IOrderService _orderService;
@@ -24,7 +24,7 @@ namespace TransportCompany.Order.Application.Consumers
             _mapper = mapper;
         }
 
-        public async Task Consume(ConsumeContext<AvailableDriverFound> context)
+        public async Task Consume(ConsumeContext<IAvailableDriverFound> context)
         {
             var message = context.Message;
             var order = new Domain.Entities.Order(message.CustomerId, message.DriverId);
@@ -46,14 +46,6 @@ namespace TransportCompany.Order.Application.Consumers
                 message.DriverId,
                 money, 
                 message.DriverDetails,
-                message.StartPoint,
-                message.DestinationPoint));
-
-            order.AddDomainEvent(new RideCreated(
-                message.DriverId, 
-                message.CustomerId,
-                money, 
-                message.CustomerDetails,
                 message.StartPoint,
                 message.DestinationPoint));
 

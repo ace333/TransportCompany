@@ -1,9 +1,9 @@
-﻿using TransportCompany.Shared.Domain.Events;
-using TransportCompany.Shared.Domain.ValueObjects;
+﻿using TransportCompany.Shared.Domain.ValueObjects;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Customer.Domain.Events
 {
-    public sealed class RouteAdded : IDomainEvent
+    public sealed class RouteAdded : IRouteAdded
     {
         public RouteAdded(int driverId, Address startPoint, Address destination)
         {

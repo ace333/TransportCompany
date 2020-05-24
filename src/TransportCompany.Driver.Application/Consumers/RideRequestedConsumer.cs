@@ -1,13 +1,13 @@
 ﻿using MassTransit;
 using System.Threading.Tasks;
 using TransportCompany.Driver.Application.Services;
-using TransportCompany.Driver.Domain.Events.Consumed;
 using TransportCompany.Driver.Domain.Services;
 using TransportCompany.Driver.Infrastructure.Persistence;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Driver.Application.Consumers
 {
-    public class RideRequestedConsumer : IConsumer<RideRequested>
+    public class RideRequestedConsumer : IConsumer<IRideRequested>
     {
         private readonly IDriverUnitOfWork _unitOfWork;
         private readonly IRideRequestService _rideRequestService;
@@ -22,7 +22,7 @@ namespace TransportCompany.Driver.Application.Consumers
             _notificationService = notificationService;
         }
 
-        public async Task Consume(ConsumeContext<RideRequested> context)
+        public async Task Consume(ConsumeContext<IRideRequested> context)
         {
             var message = context.Message;
             var drivers = await _unitOfWork.DriverRepository.GetAllAvailableDrivers();

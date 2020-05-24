@@ -42,7 +42,7 @@ namespace TransportCompany.Driver.WebAPI
                     (context) =>
                         (endpointConfigurator) =>
                         {
-                            endpointConfigurator.ConfigureConsumer<RideCreatedConsumer>(context);
+                            endpointConfigurator.ConfigureConsumer<OrderCreatedConsumer>(context);
                             endpointConfigurator.ConfigureConsumer<RideTerminatedConsumer>(context);
                         }),
                 ReceiveEndpointConfig.Create(Configuration["RABBITMQ_RIDE_QUEUE_NAME"],

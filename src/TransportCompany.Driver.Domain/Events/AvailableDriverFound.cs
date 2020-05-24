@@ -1,10 +1,9 @@
-﻿using TransportCompany.Driver.Domain.ValueObjects;
-using TransportCompany.Shared.Domain.Events;
-using TransportCompany.Shared.Domain.ValueObjects;
+﻿using TransportCompany.Shared.Domain.ValueObjects;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Driver.Domain.Events
 {
-    public sealed class AvailableDriverFound : IDomainEvent
+    public sealed class AvailableDriverFound : IAvailableDriverFound
     {
         public AvailableDriverFound(int driverId,
             int customerId,

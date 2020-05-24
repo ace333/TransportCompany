@@ -1,13 +1,13 @@
 ﻿using MassTransit;
 using System.Threading.Tasks;
-using TransportCompany.Customer.Domain.Events.Consumed;
 using TransportCompany.Customer.Domain.Services;
 using TransportCompany.Customer.Infrastructure.Persistence;
 using TransportCompany.Shared.Application.Utils;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Customer.Application.Consumers
 {
-    public class CustomerRatedConsumer : IConsumer<CustomerRated>
+    public class CustomerRatedConsumer : IConsumer<ICustomerRated>
     {
         private readonly ICustomerUnitOfWork _unitOfWork;
         private readonly ICustomerService _customerService;
@@ -18,7 +18,7 @@ namespace TransportCompany.Customer.Application.Consumers
             _customerService = customerService;
         }
 
-        public async Task Consume(ConsumeContext<CustomerRated> context)
+        public async Task Consume(ConsumeContext<ICustomerRated> context)
         {
             var message = context.Message;
             var customer = await _unitOfWork.CustomerRepository.FindAsync(message.CustomerId);

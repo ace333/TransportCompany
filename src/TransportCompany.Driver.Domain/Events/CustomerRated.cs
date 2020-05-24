@@ -1,8 +1,8 @@
-﻿using TransportCompany.Shared.Domain.Events;
+﻿using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Driver.Domain.Events
 {
-    public sealed class CustomerRated : IDomainEvent
+    public sealed class CustomerRated : ICustomerRated
     {
         public CustomerRated(int customerId, decimal grade)
         {

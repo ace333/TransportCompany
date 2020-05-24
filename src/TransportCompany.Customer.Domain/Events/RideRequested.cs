@@ -1,12 +1,11 @@
-﻿using TransportCompany.Customer.Domain.ValueObjects;
-using TransportCompany.Shared.Domain.Events;
-using TransportCompany.Shared.Domain.ValueObjects;
+﻿using TransportCompany.Shared.Domain.ValueObjects;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Customer.Domain.Events
 {
-    public sealed class RideRequested : IDomainEvent
+    public sealed class RideRequested : IRideRequested
     {
-        public RideRequested(int customerId, Address startPoint, Address destinationPoint, CustomerDetails customerDetails)
+        public RideRequested(int customerId, CustomerDetails customerDetails, Address startPoint, Address destinationPoint)
         {
             CustomerId = customerId;
             StartPoint = startPoint;

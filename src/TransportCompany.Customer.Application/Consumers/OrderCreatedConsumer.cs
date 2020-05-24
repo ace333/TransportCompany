@@ -1,12 +1,12 @@
 ﻿using MassTransit;
 using System.Threading.Tasks;
-using TransportCompany.Customer.Domain.Events.Consumed;
 using TransportCompany.Customer.Domain.Services;
 using TransportCompany.Customer.Infrastructure.Persistence;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Customer.Application.Consumers
 {
-    public class OrderCreatedConsumer : IConsumer<OrderCreated>
+    public class OrderCreatedConsumer : IConsumer<IOrderCreated>
     {
         private readonly ICustomerUnitOfWork _unitOfWork;
         private readonly IRideService _rideService;
@@ -17,7 +17,7 @@ namespace TransportCompany.Customer.Application.Consumers
             _rideService = rideService;
         }
 
-        public async Task Consume(ConsumeContext<OrderCreated> context)
+        public async Task Consume(ConsumeContext<IOrderCreated> context)
         {
             var message = context.Message;
             var customer = await _unitOfWork.CustomerRepository.GetCustomerWithRides(message.CustomerId);

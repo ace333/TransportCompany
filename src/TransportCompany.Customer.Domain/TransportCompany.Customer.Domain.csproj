@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TransportCompany.Shared.Domain\TransportCompany.Shared.Domain.csproj" />
+    <ProjectReference Include="..\TransportCompany.Shared.EventStore\TransportCompany.Shared.EventStore.csproj" />
   </ItemGroup>
 
 </Project>

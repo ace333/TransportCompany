@@ -1,11 +1,11 @@
 ﻿using MassTransit;
 using System.Threading.Tasks;
-using TransportCompany.Customer.Domain.Events.Consumed;
 using TransportCompany.Customer.Infrastructure.Persistence;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Customer.Application.Consumers
 {
-    public class RideTerminatedConsumer : IConsumer<CustomerRideTerminated>
+    public class RideTerminatedConsumer : IConsumer<IRideTerminated>
     {
         private readonly ICustomerUnitOfWork _unitOfWork;
 
@@ -14,15 +14,19 @@ namespace TransportCompany.Customer.Application.Consumers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Consume(ConsumeContext<CustomerRideTerminated> context)
+        public async Task Consume(ConsumeContext<IRideTerminated> context)
         {
             var message = context.Message;
-            var customer = await _unitOfWork.CustomerRepository.GetCustomerWithRides(message.CustomerId);
 
-            var ride = customer.GetCurrentRide();
-            ride.Cancel();
+            if(message.DestinatedEntityType == Shared.Domain.Enums.RequestorType.Customer)
+            {
+                var customer = await _unitOfWork.CustomerRepository.GetCustomerWithRides(message.DestinatedEntityId);
 
-            await _unitOfWork.CommitAsync();
+                var ride = customer.GetCurrentRide();
+                ride.Cancel();
+
+                await _unitOfWork.CommitAsync();
+            }
         }
     }
 }

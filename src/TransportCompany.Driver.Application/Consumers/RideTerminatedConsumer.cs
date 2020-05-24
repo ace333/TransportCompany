@@ -1,11 +1,12 @@
 ﻿using MassTransit;
 using System.Threading.Tasks;
-using TransportCompany.Driver.Domain.Events.Consumed;
 using TransportCompany.Driver.Infrastructure.Persistence;
+using TransportCompany.Shared.Domain.Enums;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Driver.Application.Consumers
 {
-    public class RideTerminatedConsumer : IConsumer<DriverRideTerminated>
+    public class RideTerminatedConsumer : IConsumer<IRideTerminated>
     {
         private readonly IDriverUnitOfWork _unitOfWork;
 
@@ -14,15 +15,19 @@ namespace TransportCompany.Driver.Application.Consumers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Consume(ConsumeContext<DriverRideTerminated> context)
+        public async Task Consume(ConsumeContext<IRideTerminated> context)
         {
             var message = context.Message;
-            var driver = await _unitOfWork.DriverRepository.GetDriverWithRides(message.DriverId);
 
-            var ride = driver.GetCurrentRideWhenNoCustomerPickedUp();
-            ride.Cancel();
+            if(message.DestinatedEntityType == RequestorType.Driver)
+            {
+                var driver = await _unitOfWork.DriverRepository.GetDriverWithRides(message.DestinatedEntityId);
 
-            await _unitOfWork.CommitAsync();
+                var ride = driver.GetCurrentRideWhenNoCustomerPickedUp();
+                ride.Cancel();
+
+                await _unitOfWork.CommitAsync();
+            }
         }
     }
 }

@@ -45,8 +45,7 @@ namespace TransportCompany.Order.WebAPI
                             (endpointConfigurator) =>
                             {
                                 endpointConfigurator.ConfigureConsumer<AvailableDriverFoundConsumer>(context);
-                                endpointConfigurator.ConfigureConsumer<CustomerOrderCancelledConsumer>(context);
-                                endpointConfigurator.ConfigureConsumer<DriverOrderCancelledConsumer>(context);
+                                endpointConfigurator.ConfigureConsumer<OrderCancelledConsumer>(context);
                                 endpointConfigurator.ConfigureConsumer<RideFinishedConsumer>(context);
                             })
                 };

@@ -1,10 +1,9 @@
-﻿using TransportCompany.Order.Domain.ValueObjects;
-using TransportCompany.Shared.Domain.Events;
-using TransportCompany.Shared.Domain.ValueObjects;
+﻿using TransportCompany.Shared.Domain.ValueObjects;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Order.Domain.Events
 {
-    public class OrderCreated : IDomainEvent
+    public class OrderCreated : IOrderCreated
     {
         public OrderCreated(int customerId, 
             int driverId,
@@ -24,6 +23,7 @@ namespace TransportCompany.Order.Domain.Events
         public int CustomerId { get; }
         public int DriverId { get; }
         public Money Price { get; }
+        public CustomerDetails CustomerDetails { get; }
         public DriverDetails DriverDetails { get; }
         public Address StartPoint { get; }
         public Address Destination { get; }

@@ -1,12 +1,12 @@
 ﻿using MassTransit;
 using System.Threading.Tasks;
-using TransportCompany.Driver.Domain.Events.Consumed;
 using TransportCompany.Driver.Domain.Services;
 using TransportCompany.Driver.Infrastructure.Persistence;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Driver.Application.Consumers
 {
-    public class RouteDeletedConsumer : IConsumer<RouteDeleted>
+    public class RouteDeletedConsumer : IConsumer<IRouteDeleted>
     {
         private readonly IDriverUnitOfWork _unitOfWork;
         private readonly IRideService _rideService;
@@ -17,7 +17,7 @@ namespace TransportCompany.Driver.Application.Consumers
             _rideService = rideService;
         }
 
-        public async Task Consume(ConsumeContext<RouteDeleted> context)
+        public async Task Consume(ConsumeContext<IRouteDeleted> context)
         {
             var message = context.Message;
             var driver = await _unitOfWork.DriverRepository.GetDriverWithRides(message.DriverId);

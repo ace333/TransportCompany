@@ -4,7 +4,6 @@ using AutoMapper;
 using MediatR;
 using TransportCompany.Customer.Application.Command;
 using TransportCompany.Customer.Domain.Events;
-using TransportCompany.Customer.Domain.ValueObjects;
 using TransportCompany.Customer.Infrastructure.Persistence;
 using TransportCompany.Shared.Application.Command;
 using TransportCompany.Shared.Domain.ValueObjects;
@@ -27,9 +26,9 @@ namespace TransportCompany.Customer.Application.CommandHandlers
             var customer = await _unitOfWork.CustomerRepository.FindAsync(request.Id);
             customer.AddDomainEvent(new RideRequested(
                 customer.Id,
+                _mapper.Map<CustomerDetails>(customer),
                 _mapper.Map<Address>(request.StartPoint),
-                _mapper.Map<Address>(request.DestinationPoint),
-                _mapper.Map<CustomerDetails>(customer)));
+                _mapper.Map<Address>(request.DestinationPoint)));
 
             await _unitOfWork.CommitAsync();
             return Unit.Value;

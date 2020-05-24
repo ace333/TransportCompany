@@ -1,9 +1,9 @@
-﻿using TransportCompany.Shared.Domain.Events;
-using TransportCompany.Shared.Domain.ValueObjects;
+﻿using TransportCompany.Shared.Domain.ValueObjects;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Order.Domain.Events
 {
-    public sealed class OrderCompleted : IDomainEvent
+    public sealed class OrderCompleted : IOrderCompleted
     {
         public OrderCompleted(int customerId, Invoice customersInvoice)
         {

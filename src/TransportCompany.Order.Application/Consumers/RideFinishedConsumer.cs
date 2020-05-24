@@ -1,13 +1,13 @@
 ﻿using MassTransit;
 using System.Threading.Tasks;
 using TransportCompany.Order.Domain.Events;
-using TransportCompany.Order.Domain.Events.Consumed;
 using TransportCompany.Order.Domain.Services;
 using TransportCompany.Order.Infrastructure.Persistence;
+using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Order.Application.Consumers
 {
-    public class RideFinishedConsumer : IConsumer<RideFinished>
+    public class RideFinishedConsumer : IConsumer<IRideFinished>
     {
         private readonly IOrderUnitOfWork _unitOfWork;
         private readonly IOrderService _orderService;
@@ -19,7 +19,7 @@ namespace TransportCompany.Order.Application.Consumers
             _orderService = orderService;            
         }
 
-        public async Task Consume(ConsumeContext<RideFinished> context)
+        public async Task Consume(ConsumeContext<IRideFinished> context)
         {
             var message = context.Message;
             var order = await _unitOfWork.OrderRepository.GetCurrentOrderByDriverId(message.DriverId);
