@@ -11,6 +11,7 @@ namespace TransportCompany.Customer.Infrastructure.Configurations
             base.Configure(builder);
 
             builder.Property(x => x.Type);
+            builder.Property(x => x.IsPreffered);
 
             builder.HasOne(x => x.Customer)
                 .WithMany(x => x.PaymentMethods);
