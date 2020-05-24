@@ -1,17 +1,18 @@
 ﻿using System;
-using Castle.Windsor;
 using MassTransit;
-using MassTransit.WindsorIntegration;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TransportCompany.Shared.Infrastructure.Config
 {
     public static class MassTransitConfiguration
     {
-        public static void ConfigureMassTransit(this IWindsorContainer container, RabbitMqConfig rabbitMqConfig,
-            Action<IWindsorContainerConfigurator> consumersAdditionAction, 
-            Action<IReceiveEndpointConfigurator> receiveEndpointConfigurationAction)
+        public static void ConfigureMassTransit(this IServiceCollection services, 
+            RabbitMqConfig rabbitMqConfig,
+            Action<IServiceCollectionConfigurator> consumersAdditionAction, 
+            params ReceiveEndpointConfig[] receiveEndpointConfigs)
         {
-            container.AddMassTransit(cfg =>
+            services.AddMassTransit(cfg =>
             {
                 consumersAdditionAction.Invoke(cfg);
                 cfg.AddBus(busCfg => Bus.Factory.CreateUsingRabbitMq(x =>
@@ -22,8 +23,10 @@ namespace TransportCompany.Shared.Infrastructure.Config
                         rabbitCfg.Password(rabbitMqConfig.Password);
                     });
 
-                    x.ReceiveEndpoint(rabbitMqConfig.QueueName,
-                        receiveEndpointConfigurationAction);
+                    foreach(var config in receiveEndpointConfigs)
+                    {
+                        x.ReceiveEndpoint(config.QueueName, config.ConfigurationAction(busCfg));
+                    }
                 }));
             });
         }

@@ -1,12 +1,14 @@
 using System.Reflection;
-using AutoMapper;
-using MediatR;
+using MassTransit;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TransportCompany.Customer.Application.Base;
+using TransportCompany.Customer.Application.Consumers;
 using TransportCompany.Customer.Infrastructure.Persistence;
 using TransportCompany.Shared.ApiInfrastructure;
+using TransportCompany.Shared.Infrastructure.Config;
 
 namespace TransportCompany.Customer.WebAPI
 {
@@ -22,7 +24,7 @@ namespace TransportCompany.Customer.WebAPI
             services.AddDbContext<CustomerDbContext>(options => options
                 .UseSqlServer(ConnectionString, sqlServerOptions =>
                 {
-                    sqlServerOptions.MigrationsAssembly("TransportCompany.Customer.Infrastructure");
+                    sqlServerOptions.MigrationsAssembly(Assembly.GetAssembly(typeof(CustomerDbContext)).FullName);
                     sqlServerOptions.EnableRetryOnFailure(5);
                 }));
 
@@ -33,19 +35,28 @@ namespace TransportCompany.Customer.WebAPI
             }
         }
 
-        protected override void ConfigureApplicationLayerServices(IServiceCollection services)
-        {
-            var applicationLayerAssembly = Assembly.Load("TransportCompany.Customer.Application");
-            RegisterAllServicesScopedFromAssembly(services, applicationLayerAssembly);
+        protected override ReceiveEndpointConfig[] RegisterRabbitMqEndpoints()
+            => new[]
+            {
+                ReceiveEndpointConfig.Create(Configuration["RABBITMQ_ORDER_QUEUE_NAME"], 
+                    (context) =>
+                        (endpointConfigurator) =>
+                        {
+                            endpointConfigurator.ConfigureConsumer<OrderCreatedConsumer>(context);
+                            endpointConfigurator.ConfigureConsumer<RideTerminatedConsumer>(context);
+                        }),
+                ReceiveEndpointConfig.Create(Configuration["RABBITMQ_RIDE_QUEUE_NAME"], 
+                    (context) =>
+                        (endpointConfigurator) =>
+                        {
+                            endpointConfigurator.ConfigureConsumer<CustomerRatedConsumer>(context);
+                        })
+            };
 
-            services.AddMediatR(applicationLayerAssembly);
-            services.AddAutoMapper(applicationLayerAssembly);
-        }
+        protected override Assembly GetApplicationLayerAssembly()
+            => Assembly.GetAssembly(typeof(CustomerApplicationLayerBase));
 
-        protected override void ConfigureInfrastructureLayerServices(IServiceCollection services)
-        {
-            var infrastructureLayerAssembly = Assembly.GetAssembly(typeof(CustomerDbContext));
-            RegisterAllServicesScopedFromAssembly(services, infrastructureLayerAssembly);
-        }
+        protected override Assembly GetInfrastructureLayerAsembly()
+            => Assembly.GetAssembly(typeof(CustomerDbContext));
     }
 }

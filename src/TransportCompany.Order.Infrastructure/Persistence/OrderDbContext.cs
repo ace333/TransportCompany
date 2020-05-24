@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using TransportCompany.Shared.Infrastructure.Persistence;
 
 namespace TransportCompany.Order.Infrastructure.Persistence
 {
-    public class OrderDbContext : DbContext
+    public class OrderDbContext : BaseDbContext<OrderDbContext>
     {
-        public OrderDbContext(DbContextOptions<OrderDbContext> options)
-            : base(options)
+        public OrderDbContext(DbContextOptions<OrderDbContext> options, IBusControl busControl)
+            : base(options, busControl)
         {
         }
 

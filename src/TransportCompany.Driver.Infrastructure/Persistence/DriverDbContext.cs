@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using TransportCompany.Shared.Infrastructure.Persistence;
 
 namespace TransportCompany.Driver.Infrastructure.Persistence
 {
-    public class DriverDbContext : DbContext
+    public class DriverDbContext : BaseDbContext<DriverDbContext>
     {
-        public DriverDbContext(DbContextOptions<DriverDbContext> options)
-            : base(options)
+        public DriverDbContext(DbContextOptions<DriverDbContext> options, IBusControl busControl)
+            : base(options, busControl)
         {
         }
 

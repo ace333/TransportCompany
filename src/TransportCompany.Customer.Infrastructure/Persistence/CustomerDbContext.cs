@@ -6,17 +6,12 @@ using TransportCompany.Shared.Infrastructure.Persistence;
 
 namespace TransportCompany.Customer.Infrastructure.Persistence
 {
-    public class CustomerDbContext: DbContext// BaseDbContext<CustomerDbContext>
+    public class CustomerDbContext : BaseDbContext<CustomerDbContext>
     {
-        //public CustomerDbContext(DbContextOptions<CustomerDbContext> options, IBusControl busControl) 
-        //    : base(options, busControl)
-        //{
-        //}
-
-        public CustomerDbContext(DbContextOptions<CustomerDbContext> options)
-            : base(options)
+        public CustomerDbContext(DbContextOptions<CustomerDbContext> options, IBusControl busControl)
+            : base(options, busControl)
         {
-        }
+        }      
 
         public DbSet<Domain.Entities.Customer> Customers { get; set; }
 

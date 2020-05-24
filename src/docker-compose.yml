@@ -1,16 +1,6 @@
 version: '3'
 
 services:
-  mssql:
-    restart: always
-    env_file:
-      - TransportCompany.Shared.Infrastructure/.env-infrastructure
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    ports:
-      - "1433:1433"
-    networks:
-      - transport_company_network
-
   rabbitmq:
     restart: always
     env_file:
@@ -21,6 +11,16 @@ services:
       - '15672:15672'
     networks:
       - transport_company_network
+      
+  mssql:
+    restart: always
+    env_file:
+      - TransportCompany.Shared.Infrastructure/.env-infrastructure
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"
+    networks:
+      - transport_company_network  
 
   customer:
     restart: always
@@ -37,6 +37,7 @@ services:
     depends_on: 
       - mssql
       - rabbitmq
+    command: ["./wait-for-it.sh", "mssql:1443", "--", "dotnet", "TransportCompany.Customer.WebApi.dll"]
 
   driver:
     restart: always
@@ -53,22 +54,24 @@ services:
     depends_on: 
       - mssql
       - rabbitmq
+    command: ["./wait-for-it.sh", "mssql:1443", "--", "dotnet", "TransportCompany.Driver.WebApi.dll"]
 
-  order:
-    restart: always
-    env_file:
-      - TransportCompany.Order.WebAPI/.env-order
-    build:
-      context: .
-      dockerfile: Order.Dockerfile
-    image: transport-company-order
-    ports:
-      - "5300:5300"
-    networks:
-      - transport_company_network
-    depends_on: 
-      - mssql
-      - rabbitmq
+  # order:
+  #   restart: always
+  #   env_file:
+  #     - TransportCompany.Order.WebAPI/.env-order
+  #   build:
+  #     context: .
+  #     dockerfile: Order.Dockerfile
+  #   image: transport-company-order
+  #   ports:
+  #     - "5300:5300"
+  #   networks:
+  #     - transport_company_network
+  #   depends_on: 
+  #     - mssql
+  #     - rabbitmq
+  #   command: ["./wait-for-it.sh", "mssql:1443", "--", "dotnet", "TransportCompany.Order.WebApi.dll"]
 
 networks:
   transport_company_network:

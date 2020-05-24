@@ -1,11 +1,15 @@
 using System.Reflection;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TransportCompany.Order.Application.Base;
+using TransportCompany.Order.Application.Consumers;
 using TransportCompany.Order.Infrastructure.Persistence;
 using TransportCompany.Shared.ApiInfrastructure;
+using TransportCompany.Shared.Infrastructure.Config;
 
 namespace TransportCompany.Order.WebAPI
 {
@@ -21,7 +25,7 @@ namespace TransportCompany.Order.WebAPI
             services.AddDbContext<OrderDbContext>(options => options
                 .UseSqlServer(ConnectionString, sqlServerOptions =>
                 {
-                    sqlServerOptions.MigrationsAssembly("TransportCompany.Order.Infrastructure");
+                    sqlServerOptions.MigrationsAssembly(Assembly.GetAssembly(typeof(OrderDbContext)).FullName);
                     sqlServerOptions.EnableRetryOnFailure(5);
                 }));
 
@@ -33,18 +37,24 @@ namespace TransportCompany.Order.WebAPI
             }
         }
 
-        protected override void ConfigureApplicationLayerServices(IServiceCollection services)
-        {
-            var applicationLayerAssembly = Assembly.Load("TransportCompany.Order.Application");
-            RegisterAllServicesScopedFromAssembly(services, applicationLayerAssembly);
+        protected override ReceiveEndpointConfig[] RegisterRabbitMqEndpoints()
+            => new[]
+                {
+                    ReceiveEndpointConfig.Create(Configuration["RABBITMQ_ORDER_QUEUE_NAME"],
+                        (context) =>
+                            (endpointConfigurator) =>
+                            {
+                                endpointConfigurator.ConfigureConsumer<AvailableDriverFoundConsumer>(context);
+                                endpointConfigurator.ConfigureConsumer<CustomerOrderCancelledConsumer>(context);
+                                endpointConfigurator.ConfigureConsumer<DriverOrderCancelledConsumer>(context);
+                                endpointConfigurator.ConfigureConsumer<RideFinishedConsumer>(context);
+                            })
+                };
 
-            services.AddMediatR(applicationLayerAssembly);
-        }
+        protected override Assembly GetApplicationLayerAssembly()
+            => Assembly.GetAssembly(typeof(OrderApplicationLayerBase));
 
-        protected override void ConfigureInfrastructureLayerServices(IServiceCollection services)
-        {
-            var infrastructureLayerAssembly = Assembly.GetAssembly(typeof(OrderDbContext));
-            RegisterAllServicesScopedFromAssembly(services, infrastructureLayerAssembly);
-        }
+        protected override Assembly GetInfrastructureLayerAsembly()
+            => Assembly.GetAssembly(typeof(OrderDbContext));
     }
 }

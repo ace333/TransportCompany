@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Castle.Windsor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,13 +15,15 @@ using Newtonsoft.Json.Serialization;
 using Scrutor;
 using TransportCompany.Shared.Infrastructure.Model;
 using TransportCompany.Shared.Domain.Services;
+using MediatR;
+using AutoMapper;
+using System.Threading.Tasks;
 
 namespace TransportCompany.Shared.ApiInfrastructure
 {
     public abstract class BaseStartup<TStartup> where TStartup : class
     {
         private readonly string _apiName;
-        private readonly WindsorContainer _container = new WindsorContainer();
         private readonly RabbitMqConfig _rabbitMqConfig;
         protected readonly IConfiguration Configuration;
         protected readonly string ConnectionString;
@@ -47,14 +48,11 @@ namespace TransportCompany.Shared.ApiInfrastructure
 
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureMassTransit(services);
             ConfigureDataContext(services);
 
             ConfigureInfrastructureLayerServices(services);
             ConfigureApplicationLayerServices(services);
-
-            //_container.ConfigureMassTransit(_rabbitMqConfig, 
-            //    ConsumersConfiguration.AddConsumersFromAssemblies(GetReferencedAssemblies(assembly)),
-            //    ConsumersConfiguration.RegisterConsumers(_container));
 
             services.AddSwaggerGen(c =>
             {
@@ -84,15 +82,31 @@ namespace TransportCompany.Shared.ApiInfrastructure
             app.UseRouting();
             app.UseEndpoints(c => c.MapControllers());
 
-            //applicationLifetime.ApplicationStarted.Register(() => ApplicationStarted(app));
-            //applicationLifetime.ApplicationStopped.Register(() => ApplicationStopped(app));
+            applicationLifetime.ApplicationStarted.Register(() => ApplicationStarted(app));
+            applicationLifetime.ApplicationStopped.Register(() => ApplicationStopped(app));
         }
 
+        protected abstract ReceiveEndpointConfig[] RegisterRabbitMqEndpoints();
+        protected abstract Assembly GetApplicationLayerAssembly();
+        protected abstract Assembly GetInfrastructureLayerAsembly();
         protected abstract void ConfigureDataContext(IServiceCollection services);
-        protected abstract void ConfigureApplicationLayerServices(IServiceCollection services);
-        protected abstract void ConfigureInfrastructureLayerServices(IServiceCollection services);
 
-        protected void RegisterAllServicesScopedFromAssembly(IServiceCollection services, Assembly assembly)
+        private void ConfigureApplicationLayerServices(IServiceCollection services)
+        {
+            var applicationLayerAssembly = GetApplicationLayerAssembly();
+            RegisterAllServicesScopedFromAssembly(services, applicationLayerAssembly);
+
+            services.AddMediatR(applicationLayerAssembly);
+            services.AddAutoMapper(applicationLayerAssembly);
+        }
+
+        private void ConfigureInfrastructureLayerServices(IServiceCollection services)
+        {
+            var infrastructureLayerAssembly = GetInfrastructureLayerAsembly();
+            RegisterAllServicesScopedFromAssembly(services, infrastructureLayerAssembly);
+        }
+
+        private void RegisterAllServicesScopedFromAssembly(IServiceCollection services, Assembly assembly)
         {
             services.Scan(x => x.FromAssemblies(GetAllReferencedAssembliesWithSelf(assembly))
                 .AddClasses(y => y.AssignableTo<IScopedService>())
@@ -105,6 +119,12 @@ namespace TransportCompany.Shared.ApiInfrastructure
                 .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
+        }
+        private void ConfigureMassTransit(IServiceCollection services)
+        {
+            services.ConfigureMassTransit(_rabbitMqConfig,
+                    ConsumersConfiguration.AddConsumersFromAssembly(GetApplicationLayerAssembly()),
+                    RegisterRabbitMqEndpoints());
         }
 
         private Assembly[] GetAllReferencedAssembliesWithSelf(Assembly assembly)
@@ -125,11 +145,10 @@ namespace TransportCompany.Shared.ApiInfrastructure
             {
                 Host = Configuration["RABBITMQ_HOST"],
                 User = Configuration["RABBITMQ_USER"],
-                Password = Configuration["RABBITMQ_PASSWORD"],
-                QueueName = Configuration["RABBITMQ_QUEUE_NAME"]
+                Password = Configuration["RABBITMQ_PASSWORD"]
             };
 
-            return new RabbitMqConfig(config.Host, config.User, config.Password, config.QueueName);
+            return new RabbitMqConfig(config.Host, config.User, config.Password);
         }
 
         private string GetConnectionString()
@@ -145,14 +164,16 @@ namespace TransportCompany.Shared.ApiInfrastructure
             return $"Server={sqlConfig.Server};Database={sqlConfig.Database};User ID={sqlConfig.Username};Password={sqlConfig.Password};";
         }
 
-        private Action<IApplicationBuilder> ApplicationStarted => (app) =>
+        private Func<IApplicationBuilder, Task> ApplicationStarted => async (app) =>
         {
-            app.ApplicationServices.GetService<IBusControl>().Start();
+            var bus = app.ApplicationServices.GetService<IBusControl>();
+            await bus.StartAsync();
         };
 
-        private Action<IApplicationBuilder> ApplicationStopped => (app) =>
+        private Func<IApplicationBuilder, Task> ApplicationStopped => async (app) =>
         {
-            app.ApplicationServices.GetService<IBusControl>().Stop();
+            var bus = app.ApplicationServices.GetService<IBusControl>();
+            await bus.StopAsync();
         };
     }
 }

@@ -12,6 +12,7 @@ namespace TransportCompany.Shared.Infrastructure.Persistence
         private readonly IBusControl _busControl;
 
         protected BaseDbContext(DbContextOptions<TDbContext> options, IBusControl busControl)
+            : base(options)
         {
             _busControl = busControl;
         }

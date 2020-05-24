@@ -1,21 +1,15 @@
 ﻿using System.Collections.Generic;
-using TransportCompany.Shared.Domain.Events;
 
 namespace TransportCompany.Shared.Domain.Base
 {
     public class AggregateRoot : Entity
     {
-        private readonly List<IDomainEvent> _domainEvents = new List<IDomainEvent>();
-        public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents;
+        private readonly List<object> _domainEvents = new List<object>();
+        public IReadOnlyList<object> DomainEvents => _domainEvents;
 
-        public void AddDomainEvent(IDomainEvent @event)
+        public void AddDomainEvent<TEvent>(TEvent @event) where TEvent : class
         {
             _domainEvents.Add(@event);
-        }
-
-        public void ClearEvents()
-        {
-            _domainEvents.Clear();
         }
     }
 }
