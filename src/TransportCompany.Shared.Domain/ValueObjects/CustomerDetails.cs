@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using TransportCompany.Shared.Domain.Base;
 
-namespace TransportCompany.Customer.Domain.ValueObjects
+namespace TransportCompany.Shared.Domain.ValueObjects
 {
-    public class CustomerDetails: ValueObject
+    public class CustomerDetails : ValueObject
     {
         public string Name { get; set; }
         public string Surname { get; set; }

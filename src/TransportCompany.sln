@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportCompany.Order.Infr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportCompany.Order.WebAPI", "TransportCompany.Order.WebAPI\TransportCompany.Order.WebAPI.csproj", "{E1BA495B-7683-4CDD-BD97-12557AB74485}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransportCompany.Shared.EventStore", "TransportCompany.Shared.EventStore\TransportCompany.Shared.EventStore.csproj", "{1B8EE1A5-3569-495A-936E-C28D7F1B2829}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{E1BA495B-7683-4CDD-BD97-12557AB74485}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1BA495B-7683-4CDD-BD97-12557AB74485}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1BA495B-7683-4CDD-BD97-12557AB74485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8EE1A5-3569-495A-936E-C28D7F1B2829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8EE1A5-3569-495A-936E-C28D7F1B2829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8EE1A5-3569-495A-936E-C28D7F1B2829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8EE1A5-3569-495A-936E-C28D7F1B2829}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -151,6 +157,7 @@ Global
 		{5507CC4E-F91F-4BF6-AAFD-BA9E43F0E1E1} = {2EC3A5B8-6710-4D29-9A44-B3BE50083E0D}
 		{75020ED9-D205-47D1-928B-90C15EF7EB66} = {2EC3A5B8-6710-4D29-9A44-B3BE50083E0D}
 		{E1BA495B-7683-4CDD-BD97-12557AB74485} = {2EC3A5B8-6710-4D29-9A44-B3BE50083E0D}
+		{1B8EE1A5-3569-495A-936E-C28D7F1B2829} = {057DB44B-7E8B-4DA4-9E61-CA287156AC6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {218E23AD-C83E-4A5F-B8AC-4751B260A88D}
