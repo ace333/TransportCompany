@@ -11,7 +11,7 @@ services:
       - '15672:15672'
     networks:
       - transport_company_network
-      
+
   mssql:
     restart: always
     env_file:
@@ -56,22 +56,22 @@ services:
       - rabbitmq
     command: ["./wait-for-it.sh", "mssql:1443", "--", "dotnet", "TransportCompany.Driver.WebApi.dll"]
 
-  # order:
-  #   restart: always
-  #   env_file:
-  #     - TransportCompany.Order.WebAPI/.env-order
-  #   build:
-  #     context: .
-  #     dockerfile: Order.Dockerfile
-  #   image: transport-company-order
-  #   ports:
-  #     - "5300:5300"
-  #   networks:
-  #     - transport_company_network
-  #   depends_on: 
-  #     - mssql
-  #     - rabbitmq
-  #   command: ["./wait-for-it.sh", "mssql:1443", "--", "dotnet", "TransportCompany.Order.WebApi.dll"]
+  order:
+    restart: always
+    env_file:
+      - TransportCompany.Order.WebAPI/.env-order
+    build:
+      context: .
+      dockerfile: Order.Dockerfile
+    image: transport-company-order
+    ports:
+      - "5300:5300"
+    networks:
+      - transport_company_network
+    depends_on: 
+      - mssql
+      - rabbitmq
+    command: ["./wait-for-it.sh", "mssql:1443", "--", "dotnet", "TransportCompany.Order.WebApi.dll"]
 
 networks:
   transport_company_network:
