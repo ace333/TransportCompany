@@ -10,9 +10,9 @@ using TransportCompany.Shared.Infrastructure.Model;
 namespace TransportCompany.Customer.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class CustomerController : BaseController
+    public class CustomersController : BaseController
     {
-        public CustomerController(IMediator mediator) : base(mediator)
+        public CustomersController(IMediator mediator) : base(mediator)
         {
         }
 
@@ -117,7 +117,7 @@ namespace TransportCompany.Customer.WebAPI.Controllers
             await Mediator.Send(command);
         }
 
-        [HttpPost("{id}/photo")]
+        [HttpPut("{id}/photo")]
         public async Task UploadCustomerPhoto(int id, [FromBody] UploadCustomerPhotoCommand command)
         {
             command.SetId(id);

@@ -38,6 +38,13 @@ namespace TransportCompany.Customer.Domain.Entities
             Status = RideStatus.Cancelled;
         }
 
+        public void Complete()
+        {
+            FinishedDate = DateTime.Now;
+            Status = RideStatus.Completed;
+        }
+
+        public void MarkAsOnGoing() => Status = RideStatus.OnGoing;
         public void AddRoute(Route route) => Routes.Add(route);
         public void RemoveRoute(Route route) => Routes.Remove(route);
         public Route GetRoute(int routeId) => Routes.SingleOrDefault(x => x.Id == routeId);

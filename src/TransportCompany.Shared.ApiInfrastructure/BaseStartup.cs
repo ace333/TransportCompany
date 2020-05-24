@@ -115,6 +115,12 @@ namespace TransportCompany.Shared.ApiInfrastructure
                 .WithScopedLifetime());
 
             services.Scan(x => x.FromAssemblies(GetAllReferencedAssembliesWithSelf(assembly))
+                .AddClasses(y => y.AssignableTo<ISingletonService>())
+                .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+                .AsImplementedInterfaces()
+                .WithSingletonLifetime());
+
+            services.Scan(x => x.FromAssemblies(GetAllReferencedAssembliesWithSelf(assembly))
                 .AddClasses(y => y.AssignableTo<IDomainService>())
                 .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                 .AsImplementedInterfaces()

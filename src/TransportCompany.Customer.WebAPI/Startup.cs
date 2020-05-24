@@ -43,12 +43,15 @@ namespace TransportCompany.Customer.WebAPI
                         (endpointConfigurator) =>
                         {
                             endpointConfigurator.ConfigureConsumer<OrderCreatedConsumer>(context);
+                            endpointConfigurator.ConfigureConsumer<OrderCompletedConsumer>(context);
                             endpointConfigurator.ConfigureConsumer<RideTerminatedConsumer>(context);
+                            
                         }),
                 ReceiveEndpointConfig.Create(Configuration["RABBITMQ_RIDE_QUEUE_NAME"], 
                     (context) =>
                         (endpointConfigurator) =>
                         {
+                            endpointConfigurator.ConfigureConsumer<CustomerPickedUpConsumer>(context);
                             endpointConfigurator.ConfigureConsumer<CustomerRatedConsumer>(context);
                         })
             };

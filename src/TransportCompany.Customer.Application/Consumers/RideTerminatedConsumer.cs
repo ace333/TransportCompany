@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using System.Threading.Tasks;
 using TransportCompany.Customer.Infrastructure.Persistence;
+using TransportCompany.Shared.Domain.Enums;
 using TransportCompany.Shared.EventStore.Events;
 
 namespace TransportCompany.Customer.Application.Consumers
@@ -18,11 +19,11 @@ namespace TransportCompany.Customer.Application.Consumers
         {
             var message = context.Message;
 
-            if(message.DestinatedEntityType == Shared.Domain.Enums.RequestorType.Customer)
+            if(message.DestinatedEntityType == RequestorType.Customer)
             {
                 var customer = await _unitOfWork.CustomerRepository.GetCustomerWithRides(message.DestinatedEntityId);
 
-                var ride = customer.GetCurrentRide();
+                var ride = customer.GetCurrentRideWhileWaitingForDriver();
                 ride.Cancel();
 
                 await _unitOfWork.CommitAsync();

@@ -45,8 +45,12 @@ namespace TransportCompany.Customer.Domain.Entities
             Rides.Add(ride);
         }
 
+        public PaymentMethod GetPrefferedPaymentMethod() => PaymentMethods.SingleOrDefault(x => x.IsPreffered);
+
         public void UpdateGrade(decimal grade) => SystemInfo.Grade = grade;
         public Ride GetCurrentRide() => Rides.SingleOrDefault(x => x.Status == RideStatus.OnGoing);
+        public Ride GetCurrentRideWhileWaitingForDriver() 
+            => Rides.SingleOrDefault(x => x.Status == RideStatus.WaitingForDriver);
         public Ride GetLastRide() => Rides.OrderByDescending(x => x.CreatedDate)
             .FirstOrDefault(x => x.Status == RideStatus.Completed);
     }
