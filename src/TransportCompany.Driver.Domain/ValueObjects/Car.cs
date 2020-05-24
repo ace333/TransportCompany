@@ -5,6 +5,14 @@ namespace TransportCompany.Driver.Domain.ValueObjects
 {
     public class Car : ValueObject
     {
+        public Car() { }
+
+        public Car(string model, string registrationPlateNumber)
+        {
+            Model = model;
+            RegistrationPlateNumber = registrationPlateNumber;
+        }
+
         public string Model { get; set; }
         public string RegistrationPlateNumber { get; set; }
 

@@ -6,6 +6,23 @@ namespace TransportCompany.Driver.Domain.ValueObjects
 {
     public class CompanyDetails : ValueObject
     {
+        public CompanyDetails() { }
+
+        public CompanyDetails(string companyName, 
+            string ownerName, 
+            BankDetails bankDetails, 
+            Address address, 
+            int taxIdentificationNumber, 
+            int nationalEconomyRegisterNumber)
+        {
+            CompanyName = companyName;
+            OwnerName = ownerName;
+            BankDetails = bankDetails;
+            Address = address;
+            TaxIdentificationNumber = taxIdentificationNumber;
+            NationalEconomyRegisterNumber = nationalEconomyRegisterNumber;
+        }
+
         public string CompanyName { get; set; }
         public string OwnerName { get; set; }
         public BankDetails BankDetails { get; set; }

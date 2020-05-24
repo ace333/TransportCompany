@@ -37,6 +37,7 @@ namespace TransportCompany.Driver.Domain.Entities
 
         public void Cancel() => Status = RideStatus.Cancelled;
         public void Complete() => Status = RideStatus.Completed;
+        public void PickupCustomer() => Status = RideStatus.OnGoing;
 
         public void RemoveStop(DestinationPoint destinationPoint) => Stops = Stops.Where(x => x != destinationPoint);
     }
