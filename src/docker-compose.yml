@@ -37,7 +37,7 @@ services:
     depends_on: 
       - mssql
       - rabbitmq
-    command: ["./wait-for-it.sh", "mssql:1443", "--", "dotnet", "TransportCompany.Customer.WebApi.dll"]
+    command: ["./wait-for-it.sh", "mssql:1433", "--", "dotnet", "TransportCompany.Customer.WebApi.dll"]
 
   driver:
     restart: always
@@ -54,7 +54,7 @@ services:
     depends_on: 
       - mssql
       - rabbitmq
-    command: ["./wait-for-it.sh", "mssql:1443", "--", "dotnet", "TransportCompany.Driver.WebApi.dll"]
+    command: ["./wait-for-it.sh", "mssql:1433", "--", "dotnet", "TransportCompany.Driver.WebApi.dll"]
 
   order:
     restart: always
@@ -71,7 +71,7 @@ services:
     depends_on: 
       - mssql
       - rabbitmq
-    command: ["./wait-for-it.sh", "mssql:1443", "--", "dotnet", "TransportCompany.Order.WebApi.dll"]
+    command: ["./wait-for-it.sh", "mssql:1433", "--", "dotnet", "TransportCompany.Order.WebApi.dll"]
 
 networks:
   transport_company_network:

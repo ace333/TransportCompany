@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TransportCompany.Order.Domain\TransportCompany.Order.Domain.csproj" />
     <ProjectReference Include="..\TransportCompany.Order.Infrastructure\TransportCompany.Order.Infrastructure.csproj" />
+    <ProjectReference Include="..\TransportCompany.Shared.Application\TransportCompany.Shared.Application.csproj" />
   </ItemGroup>
 
 </Project>
