@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
+using TransportCompany.Driver.Application.Dto;
+using TransportCompany.Driver.Domain.ValueObjects;
 using TransportCompany.Shared.Application.Dto;
+using TransportCompany.Shared.Application.Mapping;
 using TransportCompany.Shared.Domain.ValueObjects;
 
 namespace TransportCompany.Driver.Application.Mapping
 {
-    public class DriverMappingProfile: Profile
+    public class DriverMappingProfile: MappingProfileBase
     {
-        public DriverMappingProfile()
+        public DriverMappingProfile() : base()
         {
-            CreateMap<AddressDto, Address>();
-            CreateMap<MoneyDto, Money>();
-            CreateMap<CustomerDetailsDto, CustomerDetails>();
+            CreateMap<BankDetailsDto, BankDetails>();
 
             CreateMap<Domain.Entities.Driver, DriverDetails>()
                 .ForMember(dest => dest.Name, mbr => mbr.MapFrom(src => src.PersonalInfo.Name))
