@@ -1,9 +1,9 @@
-﻿using TransportCompany.Shared.Application.Command;
+﻿using TransportCompany.Driver.Application.Commands.Base;
+using TransportCompany.Shared.Application.Command;
 
 namespace TransportCompany.Driver.Application.Commands
 {
-    public sealed class AcceptRideRequestCommand: IdCommand, ICommand
+    public sealed class AcceptRideRequestCommand: DriverBaseCommand, ICommand
     {
-        public int RideRequestId { get; set; }
     }
 }

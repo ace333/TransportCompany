@@ -1,8 +1,9 @@
-﻿using TransportCompany.Shared.Application.Command;
+﻿using TransportCompany.Driver.Application.Commands.Base;
+using TransportCompany.Shared.Application.Command;
 
 namespace TransportCompany.Driver.Application.Commands
 {
-    public sealed class FinishRideCommand : IdCommand, ICommand
+    public sealed class FinishRideCommand : DriverBaseCommand, ICommand
     {
     }
 }
