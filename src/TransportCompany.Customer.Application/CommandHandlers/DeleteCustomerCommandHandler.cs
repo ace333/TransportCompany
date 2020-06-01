@@ -9,19 +9,19 @@ namespace TransportCompany.Customer.Application.CommandHandlers
 {
     public class DeleteCustomerCommandHandler : ICommandHandler<DeleteCustomerCommand>
     {
-        private readonly ICustomerUnitOfWork _customerUnitOfWork;
+        private readonly ICustomerUnitOfWork _unitOfWork;
 
-        public DeleteCustomerCommandHandler(ICustomerUnitOfWork customerUnitOfWork)
+        public DeleteCustomerCommandHandler(ICustomerUnitOfWork unitOfWork)
         {
-            _customerUnitOfWork = customerUnitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
         {
-            var customer = await _customerUnitOfWork.CustomerRepository.FindAsync(request.Id);
+            var customer = await _unitOfWork.CustomerRepository.FindAsync(request.Id);
 
-            _customerUnitOfWork.Delete(customer);
-            await _customerUnitOfWork.CommitAsync();
+            _unitOfWork.Delete(customer);
+            await _unitOfWork.CommitAsync();
 
             return Unit.Value;
         }

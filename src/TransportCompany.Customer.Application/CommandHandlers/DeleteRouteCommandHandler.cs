@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TransportCompany.Customer.Application.Command;
@@ -12,22 +13,22 @@ namespace TransportCompany.Customer.Application.CommandHandlers
 {
     public class DeleteRouteCommandHandler : ICommandHandler<DeleteRouteCommand>
     {
-        private readonly ICustomerUnitOfWork _customerUnitOfWork;
+        private readonly ICustomerUnitOfWork _unitOfWork;
         private readonly IRideService _rideService;
 
-        public DeleteRouteCommandHandler(ICustomerUnitOfWork customerUnitOfWork, IRideService rideService)
+        public DeleteRouteCommandHandler(ICustomerUnitOfWork unitOfWork, IRideService rideService)
         {
-            _customerUnitOfWork = customerUnitOfWork;
+            _unitOfWork = unitOfWork;
             _rideService = rideService;
         }
 
         public async Task<Unit> Handle(DeleteRouteCommand request, CancellationToken cancellationToken)
         {
-            var customer = await _customerUnitOfWork.CustomerRepository.GetCustomerWithRides(request.Id);
-            Fail.IfNull(customer, request.Id);
+            var customer = await _unitOfWork.CustomerRepository.GetCustomerWithRides(request.CustomerId);
+            Fail.IfNull(customer, request.CustomerId);
 
-            var ride = customer.GetCurrentRide();
-            Fail.IfNull(ride, customer, request.Id);
+            var ride = customer.Rides.SingleOrDefault(x => x.Id == request.Id);
+            Fail.IfNull(ride, request.Id);
 
             var routeToDelete = ride.GetRoute(request.RouteId);
             Fail.IfNull(routeToDelete, request.RouteId);
@@ -35,7 +36,7 @@ namespace TransportCompany.Customer.Application.CommandHandlers
             _rideService.RemoveRoute(ride, routeToDelete);
             customer.AddDomainEvent(new RouteDeleted(ride.DriverId, routeToDelete.StartPoint));
 
-            await _customerUnitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync();
 
             return Unit.Value;
         }

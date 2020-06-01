@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TransportCompany.Customer.Application.Command;
@@ -20,10 +21,12 @@ namespace TransportCompany.Customer.Application.CommandHandlers
 
         public async Task<Unit> Handle(CancelRideCommand request, CancellationToken cancellationToken)
         {
-            var customer = await _unitOfWork.CustomerRepository.GetCustomerWithRides(request.Id);
-            Fail.IfNull(customer, request.Id);
+            var customer = await _unitOfWork.CustomerRepository.GetCustomerWithRides(request.CustomerId);
+            Fail.IfNull(customer, request.CustomerId);
 
-            var ride = customer.GetCurrentRide();
+            var ride = customer.Rides.SingleOrDefault(x => x.Id == request.Id);
+            Fail.IfNull(ride, request.Id);
+
             ride.Cancel();
 
             customer.AddDomainEvent(new RideCancelled(customer.Id, request.Comments));
