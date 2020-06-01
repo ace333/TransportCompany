@@ -7,15 +7,19 @@ namespace TransportCompany.Driver.Infrastructure.Persistence
     {
         public DriverUnitOfWork(DriverDbContext driverDbContext, 
             IDriverRepository driverRepository,
+            IRideRepository rideRepository,
             IRideRequestRepository rideRequestRepository)
             : base(driverDbContext)
         {
             DriverRepository = driverRepository;
+            RideRepository = rideRepository;
             RideRequestRepository = rideRequestRepository;
         }
 
         public IDriverRepository DriverRepository { get; }
 
         public IRideRequestRepository RideRequestRepository { get; }
+
+        public IRideRepository RideRepository { get; }
     }
 }

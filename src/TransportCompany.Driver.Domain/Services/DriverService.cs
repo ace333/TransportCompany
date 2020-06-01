@@ -1,4 +1,5 @@
 ﻿using System;
+using TransportCompany.Driver.Domain.Entities;
 using TransportCompany.Driver.Domain.ValueObjects;
 using TransportCompany.Shared.Domain.Enums;
 using TransportCompany.Shared.Domain.ValueObjects;
@@ -17,6 +18,15 @@ namespace TransportCompany.Driver.Domain.Services
             // Method should be able to create a *.pdf invoice file with customer details and payment amount
             // For a demo purposes the file would be just empty byte array
             return new Invoice(driverId, new byte[0]);
+        }
+
+        public void RecalculateDriversGrade(TDriver driver, decimal grade)
+        {
+            var rideCount = driver.Rides.Count;
+            var gradesSum = driver.SystemInfo.Grade * (rideCount - 1);
+            var newGrade = (gradesSum + grade) / rideCount;
+
+            driver.UpdateGrade(newGrade);
         }
 
         public void UpdateDriver(TDriver driver, string name, string surname, string phoneNumber, string email)

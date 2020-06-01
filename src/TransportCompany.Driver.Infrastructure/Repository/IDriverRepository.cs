@@ -9,5 +9,6 @@ namespace TransportCompany.Driver.Infrastructure.Repository
     {
         Task<TDriver> GetDriverWithRides(int id);
         Task<IEnumerable<TDriver>> GetAllAvailableDrivers();
+        Task<byte[]> GetDriverPhoto(int id);
     }
 }

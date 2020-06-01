@@ -6,6 +6,7 @@ namespace TransportCompany.Driver.Infrastructure.Persistence
     public interface IDriverUnitOfWork : IUnitOfWork
     {
         IDriverRepository DriverRepository { get; }
+        IRideRepository RideRepository { get; }
         IRideRequestRepository RideRequestRepository { get; }
     }
 }

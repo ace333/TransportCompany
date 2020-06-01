@@ -25,9 +25,16 @@ namespace TransportCompany.Driver.Infrastructure.Repository
             .Where(x => x.Rides.All(y => y.Status == RideStatus.Completed))
             .ToListAsync();
 
+        public async Task<byte[]> GetDriverPhoto(int id)
+        => await _driverDbContext.Drivers
+            .Where(x => x.Id == id)
+            .Select(x => x.PersonalInfo.Photo)
+            .SingleOrDefaultAsync();
+
         public async Task<TDriver> GetDriverWithRides(int id)
             => await _driverDbContext.Drivers
             .Include(x => x.Rides)
+                .ThenInclude(y => y.Stops)
             .Where(x => x.Id == id)
             .SingleOrDefaultAsync();
     }

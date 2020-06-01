@@ -17,5 +17,6 @@ namespace TransportCompany.Driver.Domain.Services
         void UpdateDriversLicense(TDriver driver, string licenseNumber, DateTime dateOfIssue, DateTime expiryDate);
         Invoice GenerateInvoice(int driverId, PersonalInfo driversPersonalInfo, CompanyDetails comapnyDetails, 
             Money rideIncome);
+        void RecalculateDriversGrade(TDriver driver, decimal grade);
     }
 }
