@@ -27,50 +27,6 @@ namespace TransportCompany.Customer.WebAPI.Controllers
             return await Mediator.Send(query);
         }
 
-        [HttpPost("{id}/rides")]
-        public async Task RequestRide(int id, [FromBody] RequestRideCommand command)
-        {
-            command.SetId(id);
-            await Mediator.Send(command);
-        }
-
-        [HttpGet("{id}/rides")]
-        public async Task<PaginatedList<CustomerRidesQueryDto>> GetCustomerRide(int id, [FromQuery] CustomerRidesQuery query)
-        {
-            query.SetId(id);
-            return await Mediator.Send(query);
-        }
-
-        [HttpGet("{id}/rides/{rideId}")]
-        public async Task<CustomerRideDetailsQueryDto> GetCustomerRideDetails(int rideId, 
-            [FromQuery] CustomerRideDetailsQuery query)
-        {
-            query.SetId(rideId);
-            return await Mediator.Send(query);
-        }
-
-        [HttpGet("{id}/rides/{rideId}/invoice")]
-        public async Task<FileResult> GetCustomerRideInvoice(int rideId, [FromQuery] CustomerRideInvoiceQuery query)
-        {
-            query.SetId(rideId);
-            return await Mediator.Send(query);
-        }
-
-        [HttpGet("{id}/rides/current")]
-        public async Task<CustomerCurrentRideDetailsQueryDto> GetCurrentCustomerRideDetails(int id, 
-            [FromQuery] CustomerCurrentRideDetailsQuery query)
-        {
-            query.SetId(id);
-            return await Mediator.Send(query);
-        }
-
-        [HttpPatch("{id}/rides/{rideId}/cancel")]
-        public async Task CancelCurrentRide(int id, [FromBody] CancelRideCommand command)
-        {
-            command.SetId(id);
-            await Mediator.Send(command);
-        }
-
         [HttpGet("{id}/photo")]
         public async Task<CustomerPhotoQueryDto> GetCustomerPhoto(int id, [FromQuery] CustomerPhotoQuery query)
         {
@@ -91,27 +47,6 @@ namespace TransportCompany.Customer.WebAPI.Controllers
 
         [HttpDelete("{id}")]
         public async Task DeleteCustomer(int id, [FromBody] DeleteCustomerCommand command)
-        {
-            command.SetId(id);
-            await Mediator.Send(command);
-        }
-
-        [HttpPost("{id}/route")]
-        public async Task AddRoute(int id, [FromBody] AddRouteCommand command)
-        {
-            command.SetId(id);
-            await Mediator.Send(command);
-        }
-
-        [HttpDelete("{id}/route")]
-        public async Task DeleteRoute(int id, [FromBody] DeleteRouteCommand command)
-        {
-            command.SetId(id);
-            await Mediator.Send(command);
-        }
-
-        [HttpPatch("{id}/rate")]
-        public async Task RateDriver(int id, [FromBody] RateDriverCommand command)
         {
             command.SetId(id);
             await Mediator.Send(command);
