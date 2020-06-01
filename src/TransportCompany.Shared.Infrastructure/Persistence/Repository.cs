@@ -19,7 +19,8 @@ namespace TransportCompany.Shared.Infrastructure.Persistence
 
         public IQueryable<TEntity> GetAll()
         {
-            return _dbContext.Set<TEntity>();
+            return _dbContext.Set<TEntity>()
+                .AsNoTracking();
         }
     }
 }
