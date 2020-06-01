@@ -17,11 +17,13 @@ namespace TransportCompany.Customer.Infrastructure.Repository
             _customerDbContext = customerDbContext;
         }
 
-        // TO DO: change to customer repository or smth
         public IQueryable<Ride> GetFinishedRidesByCustomerId(int customerId)
             => _customerDbContext.Customers
                 .Include(x => x.Rides)
+                .AsNoTracking()
                 .Where(x => x.Id == customerId)
-                .SelectMany(x => x.Rides.Where(y => y.Status == RideStatus.Completed));
+                .SelectMany(x => x.Rides
+                    .Where(y => new[] { RideStatus.Completed, RideStatus.Cancelled }.Contains(y.Status))
+                );
     }
 }

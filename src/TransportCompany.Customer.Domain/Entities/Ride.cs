@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TransportCompany.Customer.Domain.Enums;
-using TransportCompany.Customer.Domain.ValueObjects;
 using TransportCompany.Shared.Domain.Base;
 using TransportCompany.Shared.Domain.ValueObjects;
 
