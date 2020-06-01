@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TransportCompany.Driver.Application.Commands;
@@ -20,11 +21,13 @@ namespace TransportCompany.Driver.Application.CommandHandlers
 
         public async Task<Unit> Handle(RateCustomerCommand request, CancellationToken cancellationToken)
         {
-            var driver = await _unitOfWork.DriverRepository.FindAsync(request.Id);
+            var driver = await _unitOfWork.DriverRepository.GetDriverWithRides(request.DriverId);
+            Fail.IfNull(driver, request.DriverId);
+
+            var ride = driver.Rides.SingleOrDefault(x => x.Id == request.Id);
             Fail.IfNull(driver, request.Id);
 
-            var lastRide = driver.GetLastRide();
-            driver.AddDomainEvent(new CustomerRated(lastRide.CustomerId, request.Grade));
+            driver.AddDomainEvent(new CustomerRated(ride.CustomerId, request.Grade));
 
             await _unitOfWork.CommitAsync();
             return Unit.Value;

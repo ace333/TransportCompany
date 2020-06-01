@@ -6,6 +6,7 @@ using TransportCompany.Driver.Application.Commands;
 using TransportCompany.Driver.Domain.Events;
 using TransportCompany.Driver.Infrastructure.Persistence;
 using TransportCompany.Shared.Application.Command;
+using TransportCompany.Shared.Application.Utils;
 using TransportCompany.Shared.Domain.ValueObjects;
 
 namespace TransportCompany.Driver.Application.CommandHandlers
@@ -23,15 +24,20 @@ namespace TransportCompany.Driver.Application.CommandHandlers
 
         public async Task<Unit> Handle(AcceptRideRequestCommand request, CancellationToken cancellationToken)
         {
-            var driver = await _unitOfWork.DriverRepository.FindAsync(request.Id);
-            var rideRequest = await _unitOfWork.RideRequestRepository.FindAsync(request.RideRequestId);
+            var driver = await _unitOfWork.DriverRepository.FindAsync(request.DriverId);
+            Fail.IfNull(driver, request.DriverId);
+
+            var rideRequest = await _unitOfWork.RideRequestRepository.FindAsync(request.Id);
+            Fail.IfNull(rideRequest, request.Id);
+
             var driverDetails = _mapper.Map<DriverDetails>(driver);
 
             rideRequest.MarkAsFound();
+
             driver.AddDomainEvent(new AvailableDriverFound(driver.Id, rideRequest.CustomerId, rideRequest.CustomerDetails,
                 driverDetails, rideRequest.StartPoint, rideRequest.DestinationPoint));
-
             await _unitOfWork.CommitAsync();
+
             return Unit.Value;
         }
     }

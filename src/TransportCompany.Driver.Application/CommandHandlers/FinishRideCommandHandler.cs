@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TransportCompany.Driver.Application.Commands;
@@ -23,10 +24,12 @@ namespace TransportCompany.Driver.Application.CommandHandlers
 
         public async Task<Unit> Handle(FinishRideCommand request, CancellationToken cancellationToken)
         {
-            var driver = await _unitOfWork.DriverRepository.GetDriverWithRides(request.Id);
+            var driver = await _unitOfWork.DriverRepository.GetDriverWithRides(request.DriverId);
+            Fail.IfNull(driver, request.DriverId);
+
+            var ride = driver.Rides.SingleOrDefault(x => x.Id == request.Id);
             Fail.IfNull(driver, request.Id);
 
-            var ride = driver.GetCurrentRide();
             ride.Complete();
 
             var invoice = _driverService.GenerateInvoice(driver.Id, driver.PersonalInfo, driver.CompanyDetails, ride.Income);
