@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using TransportCompany.Driver.Application.Dto;
+﻿using TransportCompany.Driver.Application.Dto;
 using TransportCompany.Driver.Domain.ValueObjects;
-using TransportCompany.Shared.Application.Dto;
 using TransportCompany.Shared.Application.Mapping;
 using TransportCompany.Shared.Domain.ValueObjects;
 
@@ -12,6 +10,16 @@ namespace TransportCompany.Driver.Application.Mapping
         public DriverMappingProfile() : base()
         {
             CreateMap<BankDetailsDto, BankDetails>();
+            CreateMap<BankDetails, BankDetailsDto>();
+
+            CreateMap<CarDto, Car>();
+            CreateMap<Car, CarDto>();
+
+            CreateMap<CompanyDetailsDto, CompanyDetails>();
+            CreateMap<CompanyDetails, CompanyDetailsDto>();
+
+            CreateMap<DriversLicenceDto, DriversLicense>();
+            CreateMap<DriversLicense, DriversLicenceDto>();
 
             CreateMap<Domain.Entities.Driver, DriverDetails>()
                 .ForMember(dest => dest.Name, mbr => mbr.MapFrom(src => src.PersonalInfo.Name))
