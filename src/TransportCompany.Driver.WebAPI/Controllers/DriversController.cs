@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TransportCompany.Driver.Application.Commands;
+using TransportCompany.Driver.Application.Dto;
+using TransportCompany.Driver.Application.Query;
 using TransportCompany.Shared.ApiInfrastructure;
+using TransportCompany.Shared.Infrastructure.Model;
 
 namespace TransportCompany.Customer.WebAPI.Controllers
 {
@@ -17,43 +20,26 @@ namespace TransportCompany.Customer.WebAPI.Controllers
         public async Task CreateDriver([FromBody] CreateDriverCommand command)
             => await Mediator.Send(command);
 
-        [HttpPost("{id}/rides/accept")]
-        public async Task AcceptRideRequest(int id, [FromBody] AcceptRideRequestCommand command)
+        [HttpGet]
+        public async Task<PaginatedList<DriversQueryDto>> GetDrivers([FromQuery] DriversQuery query)
+            => await Mediator.Send(query);
+
+        [HttpGet("{id}")]
+        public async Task<DriverDetailsQueryDto> GetDriverDetails(int id, [FromQuery] DriverDetailsQuery query)
         {
-            command.SetId(id);
-            await Mediator.Send(command);
+            query.SetId(id);
+            return await Mediator.Send(query);
         }
 
-        [HttpPatch("{id}/rides/cancel")]
-        public async Task CancelRide(int id, [FromBody] CancelRideCommand command)
+        [HttpGet("{id}/photo")]
+        public async Task<DriverPhotoQueryDto> GetDriverPhoto(int id, [FromQuery] DriverPhotoQuery query)
         {
-            command.SetId(id);
-            await Mediator.Send(command);
+            query.SetId(id);
+            return await Mediator.Send(query);
         }
 
         [HttpDelete("{id}")]
         public async Task DeleteDriver(int id, [FromBody] DeleteDriverCommand command)
-        {
-            command.SetId(id);
-            await Mediator.Send(command);
-        }
-
-        [HttpPatch("{id}/rides/finish")]
-        public async Task FinishRide(int id, [FromBody] FinishRideCommand command)
-        {
-            command.SetId(id);
-            await Mediator.Send(command);
-        }
-
-        [HttpPatch("{id}/rate")]
-        public async Task RateCustomer(int id, [FromBody] RateCustomerCommand command)
-        {
-            command.SetId(id);
-            await Mediator.Send(command);
-        }
-
-        [HttpPatch("{id}/rides")]
-        public async Task TakeCustomer(int id, [FromBody] TakeCustomerCommand command)
         {
             command.SetId(id);
             await Mediator.Send(command);
