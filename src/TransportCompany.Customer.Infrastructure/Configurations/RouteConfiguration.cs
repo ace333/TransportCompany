@@ -10,11 +10,12 @@ namespace TransportCompany.Customer.Infrastructure.Configurations
         {
             base.Configure(builder);
 
-            builder.OwnsOne(x => x.StartPoint, AddressConfiguration.Configure);
-            builder.OwnsOne(x => x.Destination, AddressConfiguration.Configure);
+            builder.OwnsOne(x => x.DestinationPoint, AddressConfiguration.Configure);
 
             builder.HasOne(x => x.Ride)
                 .WithMany(x => x.Routes);
+
+            builder.HasOne(x => x.PreviousRoute);
         }
     }
 }

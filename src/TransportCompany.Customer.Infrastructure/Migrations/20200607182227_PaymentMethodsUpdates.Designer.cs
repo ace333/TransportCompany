@@ -11,8 +11,8 @@ using TransportCompany.Customer.Infrastructure.Persistence;
 namespace TransportCompany.Customer.Infrastructure.Migrations
 {
     [DbContext(typeof(CustomerDbContext))]
-    [Migration("20200523164450_CustomerAggregate")]
-    partial class CustomerAggregate
+    [Migration("20200607182227_PaymentMethodsUpdates")]
+    partial class PaymentMethodsUpdates
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -81,6 +81,9 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsPreffered")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -138,10 +141,15 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("PreviousRouteId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("RideId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PreviousRouteId");
 
                     b.HasIndex("RideId");
 
@@ -152,8 +160,8 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                 {
                     b.HasBaseType("TransportCompany.Customer.Domain.Entities.PaymentMethods.PaymentMethod");
 
-                    b.Property<int>("CardNumber")
-                        .HasColumnType("int");
+                    b.Property<long>("CardNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Country")
                         .HasColumnType("int");
@@ -320,7 +328,7 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsOne("TransportCompany.Customer.Domain.ValueObjects.DriverDetails", "DriverDetails", b1 =>
+                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.DriverDetails", "DriverDetails", b1 =>
                         {
                             b1.Property<int>("RideId")
                                 .ValueGeneratedOnAdd()
@@ -391,7 +399,7 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18, 2)");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
@@ -409,54 +417,16 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
 
             modelBuilder.Entity("TransportCompany.Customer.Domain.Entities.Route", b =>
                 {
+                    b.HasOne("TransportCompany.Customer.Domain.Entities.Route", "PreviousRoute")
+                        .WithMany()
+                        .HasForeignKey("PreviousRouteId");
+
                     b.HasOne("TransportCompany.Customer.Domain.Entities.Ride", "Ride")
                         .WithMany("Routes")
                         .HasForeignKey("RideId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.Address", "Destination", b1 =>
-                        {
-                            b1.Property<int>("RouteId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(64)")
-                                .HasMaxLength(64);
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(64)")
-                                .HasMaxLength(64);
-
-                            b1.Property<string>("HouseNumber")
-                                .HasColumnType("nvarchar(64)")
-                                .HasMaxLength(64);
-
-                            b1.Property<string>("State")
-                                .HasColumnType("nvarchar(64)")
-                                .HasMaxLength(64);
-
-                            b1.Property<string>("Street")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(64)")
-                                .HasMaxLength(64);
-
-                            b1.Property<string>("ZipCode")
-                                .HasColumnType("nvarchar(64)")
-                                .HasMaxLength(64);
-
-                            b1.HasKey("RouteId");
-
-                            b1.ToTable("Route");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RouteId");
-                        });
-
-                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.Address", "StartPoint", b1 =>
+                    b.OwnsOne("TransportCompany.Shared.Domain.ValueObjects.Address", "DestinationPoint", b1 =>
                         {
                             b1.Property<int>("RouteId")
                                 .ValueGeneratedOnAdd()

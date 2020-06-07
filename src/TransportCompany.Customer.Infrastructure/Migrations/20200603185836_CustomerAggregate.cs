@@ -64,6 +64,7 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Type = table.Column<int>(nullable: false),
+                    IsPreffered = table.Column<bool>(nullable: false),
                     CustomerId = table.Column<int>(nullable: true),
                     CardNumber = table.Column<int>(nullable: true),
                     ExpiryDate = table.Column<DateTime>(nullable: true),
@@ -96,7 +97,7 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                     Status = table.Column<int>(nullable: false),
                     UpdatedDate = table.Column<DateTime>(nullable: true),
                     Price_Currency = table.Column<string>(maxLength: 64, nullable: true),
-                    Price_Amount = table.Column<decimal>(nullable: true),
+                    Price_Amount = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     DriverId = table.Column<int>(nullable: false),
                     DriverDetails_Name = table.Column<string>(maxLength: 64, nullable: true),
                     DriverDetails_Grade = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -127,23 +128,24 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    StartPoint_Street = table.Column<string>(maxLength: 64, nullable: true),
-                    StartPoint_HouseNumber = table.Column<string>(maxLength: 64, nullable: true),
-                    StartPoint_ZipCode = table.Column<string>(maxLength: 64, nullable: true),
-                    StartPoint_City = table.Column<string>(maxLength: 64, nullable: true),
-                    StartPoint_State = table.Column<string>(maxLength: 64, nullable: true),
-                    StartPoint_Country = table.Column<string>(maxLength: 64, nullable: true),
-                    Destination_Street = table.Column<string>(maxLength: 64, nullable: true),
-                    Destination_HouseNumber = table.Column<string>(maxLength: 64, nullable: true),
-                    Destination_ZipCode = table.Column<string>(maxLength: 64, nullable: true),
-                    Destination_City = table.Column<string>(maxLength: 64, nullable: true),
-                    Destination_State = table.Column<string>(maxLength: 64, nullable: true),
-                    Destination_Country = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_Street = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_HouseNumber = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_ZipCode = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_City = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_State = table.Column<string>(maxLength: 64, nullable: true),
+                    DestinationPoint_Country = table.Column<string>(maxLength: 64, nullable: true),
+                    PreviousRouteId = table.Column<int>(nullable: true),
                     RideId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Route", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Route_Route_PreviousRouteId",
+                        column: x => x.PreviousRouteId,
+                        principalTable: "Route",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Route_Ride_RideId",
                         column: x => x.RideId,
@@ -166,6 +168,11 @@ namespace TransportCompany.Customer.Infrastructure.Migrations
                 name: "IX_Ride_CustomerId",
                 table: "Ride",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Route_PreviousRouteId",
+                table: "Route",
+                column: "PreviousRouteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Route_RideId",
