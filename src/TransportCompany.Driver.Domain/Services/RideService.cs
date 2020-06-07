@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using TransportCompany.Driver.Domain.Entities;
 using TransportCompany.Driver.Domain.Enums;
-using TransportCompany.Driver.Domain.ValueObjects;
 using TransportCompany.Shared.Domain.ValueObjects;
 
 namespace TransportCompany.Driver.Domain.Services
@@ -19,8 +18,8 @@ namespace TransportCompany.Driver.Domain.Services
         public Ride CreateNewRide(Address startPoint, Address destinationPoint, Money income,
             int customerId, CustomerDetails customerDetails)
         {
-            var start = new DestinationPoint(PointStatus.OnTheWay, PointType.PickupPoint, startPoint);
-            var destination = new DestinationPoint(PointStatus.NotStarted, PointType.DestinationPoint, destinationPoint);
+            var start = new DestinationPoint(PointStatus.OnTheWay, startPoint);
+            var destination = new DestinationPoint(PointStatus.NotStarted, destinationPoint, start);
 
             var driversIncome = new Money(income.Currency, income.Amount * DriverIncomeFromSingleRidePercent);
 
@@ -29,23 +28,30 @@ namespace TransportCompany.Driver.Domain.Services
 
         public void AddStop(Ride ride, Address startPoint, Address destinationPoint)
         {
-            var stops = ride.Stops.ToList();
-            var stopBefore = stops.SingleOrDefault(x => x.Address == startPoint);
-            var index = stops.IndexOf(stopBefore) + 1;
-            var stopAfter = stops[index];
+            var previousPoint = ride.Stops.SingleOrDefault(x => x.Address == startPoint);
+            var routeToUpdate = ride.Stops.SingleOrDefault(x => x.PreviousPoint == previousPoint);
 
-            var stopBetween = _destinationPointService.CreateStopPoint(destinationPoint);
+            var newDestinationPoint = _destinationPointService.CreateDestinationPoint(destinationPoint, previousPoint);
+            routeToUpdate.PreviousPoint = newDestinationPoint;
 
-            stops.Add(stopAfter);
-            stops[index] = stopBetween;
-
-            ride.Stops = stops;
+            ride.AddStop(newDestinationPoint);
         }
 
         public void RemoveStop(Ride ride, Address startPoint)
         {
             var stopToRemove = ride.Stops.SingleOrDefault(x => x.Address == startPoint);
+            var nextStop= ride.Stops.SingleOrDefault(x => x.PreviousPoint == stopToRemove);
+
+            nextStop.PreviousPoint = stopToRemove.PreviousPoint;
             ride.RemoveStop(stopToRemove);
+        }
+
+        public DestinationPoint GetNextStop(Ride ride)
+        {
+            var lastReachedPoint = ride.Stops.OrderByDescending(x => x.UpdatedDate)
+                .FirstOrDefault(x => x.Status == PointStatus.Reached);
+
+            return ride.Stops.SingleOrDefault(x => x.PreviousPoint == lastReachedPoint);
         }
     }
 }

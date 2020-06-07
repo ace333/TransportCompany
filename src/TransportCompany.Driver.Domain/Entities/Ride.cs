@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TransportCompany.Driver.Domain.Enums;
-using TransportCompany.Driver.Domain.ValueObjects;
 using TransportCompany.Shared.Domain.Base;
 using TransportCompany.Shared.Domain.ValueObjects;
 
@@ -33,12 +31,13 @@ namespace TransportCompany.Driver.Domain.Entities
         public Invoice Invoice { get; set; }
 
         public Driver Driver { get; set; }
-        public IEnumerable<DestinationPoint> Stops { get; set; }
+        public ICollection<DestinationPoint> Stops { get; set; }
 
         public void Cancel() => Status = RideStatus.Cancelled;
         public void Complete() => Status = RideStatus.Completed;
         public void PickupCustomer() => Status = RideStatus.OnGoing;
 
-        public void RemoveStop(DestinationPoint destinationPoint) => Stops = Stops.Where(x => x != destinationPoint);
+        public void AddStop(DestinationPoint destinationPoint) => Stops.Add(destinationPoint);
+        public void RemoveStop(DestinationPoint destinationPoint) => Stops.Remove(destinationPoint);
     }
 }
