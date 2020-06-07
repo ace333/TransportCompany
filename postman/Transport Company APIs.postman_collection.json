@@ -1,0 +1,663 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Transport Company APIs",
+		"_postman_id": "336395f4-c37e-0811-02d7-e35bbb519678",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Customer",
+			"description": "",
+			"item": [
+				{
+					"name": "[CUSTOMER] GET Customers",
+					"request": {
+						"url": {
+							"raw": "http://localhost:5100/api/customers?limit=10&offset=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"api",
+								"customers"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER] Get Customer Details",
+					"request": {
+						"url": "http://localhost:5100/api/customers/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER] GET Completed Rides",
+					"request": {
+						"url": {
+							"raw": "http://localhost:5100/api/customers/3/rides?limit=10&offset=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"api",
+								"customers",
+								"3",
+								"rides"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER] GET Ride Details",
+					"request": {
+						"url": "http://localhost:5100/api/customers/1/rides/2",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER] POST Create Customer",
+					"request": {
+						"url": "http://localhost:5100/api/customers",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"John\",\n\t\"surname\": \"Doe\",\n\t\"phoneNumber\": \"535311311\",\n\t\"email\": \"john.doe@gmail.com\",\n\t\"nationality\": 1\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER] POST Request a Ride",
+					"request": {
+						"url": "http://localhost:5100/api/customers/1/rides",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"startPoint\": {\n\t\t\"street\": \"Na Kozłówce\",\n\t\t\"houseNumber\": \"12/66\",\n\t\t\"zipCode\": \"30-670\",\n\t\t\"city\": \"Kraków\",\n\t\t\"state\": \"\",\n\t\t\"country\": \"Poland\"\n\t},\n\t\"destinationPoint\": {\n\t\t\"street\": \"Walerego Sławka\",\n\t\t\"houseNumber\": \"13/51\",\n\t\t\"zipCode\": \"30-555\",\n\t\t\"city\": \"Kraków\",\n\t\t\"state\": \"\",\n\t\t\"country\": \"Poland\"\n\t}\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER] POST Rate a Driver",
+					"request": {
+						"url": "http://localhost:5100/api/customers/1/rides/3/route",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"grade\": 2.0\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER] POST Add Route",
+					"request": {
+						"url": "http://localhost:5100/api/customers/1/rides/1/routes",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"previousRouteId\" : 1,\n\t\"destinationPoint\": {\n\t\t\"street\": \"Polna 30\",\n\t\t\"houseNumber\": \"\",\n\t\t\"zipCode\": \"30-555\",\n\t\t\"city\": \"Kraków\",\n\t\t\"state\": \"\",\n\t\t\"country\": \"Poland\"\n\t}\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER] POST Delete Route",
+					"request": {
+						"url": "http://localhost:5100/api/customers/1/rides/1/routes/6",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER] POST Cancel a Ride",
+					"request": {
+						"url": "http://localhost:5100/api/customers/1/rides/2/cancel",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"comments\": \"Driver was ugly.\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER]  Add Payment Method",
+					"request": {
+						"url": "http://localhost:5100/api/customers/1/paymentmethods",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\": \"DebitOrCreditCard\",\n\t\"cardNumber\": 4412340000004567,\n\t\"expiryDate\": \"2025-01-01T00:00:00\",\n\t\"cvvCode\": 713,\n\t\"country\": \"Poland\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[CUSTOMER]  Delete Payment Method",
+					"request": {
+						"url": "http://localhost:5100/api/customers/1/paymentmethods/1",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Driver",
+			"description": "",
+			"item": [
+				{
+					"name": "[DRIVER] GET Drivers",
+					"request": {
+						"url": {
+							"raw": "http://localhost:5200/api/drivers?limit=10&offset=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5200",
+							"path": [
+								"api",
+								"drivers"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] Get Driver Details",
+					"request": {
+						"url": "http://localhost:5200/api/drivers/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] GET Completed Rides",
+					"request": {
+						"url": {
+							"raw": "http://localhost:5100/api/customers/1/rides?limit=10&offset=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"api",
+								"customers",
+								"1",
+								"rides"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] GET Ride Details",
+					"request": {
+						"url": "http://localhost:5200/api/drivers/1/rides/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] Get Next Ride Stop",
+					"request": {
+						"url": "http://localhost:5200/api/drivers/1/rides/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] POST Accept a Ride",
+					"request": {
+						"url": "http://localhost:5200/api/drivers/1/riderequests/1",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"rideRequestId\": 1\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] POST Create Driver",
+					"request": {
+						"url": "http://localhost:5200/api/drivers",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Adam\",\n\t\"surname\": \"Driver\",\n\t\"phoneNumber\": \"535311311\",\n\t\"email\": \"adam.driver@gmail.com\",\n\t\"nationality\": 1,\n\t\"driversLicenseNumber\": \"A0702PP\",\n\t\"driversLicenseDateOfIssue\": \"2020-05-24T00:00:00Z\",\n\t\"DriversLicenseExpiryDate\": \"2030-05-24T00:00:00Z\",\n\t\"carModel\": \"Ford Focus ST\",\n\t\"carRegistrationPlateNumber\": \"RZ2860S\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] Mark Point as Reached",
+					"request": {
+						"url": "http://localhost:5200/api/drivers/1/rides/1/stops",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] Finish a Ride",
+					"request": {
+						"url": "http://localhost:5200/api/drivers/2/rides/4/finish",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] Cancel a Ride",
+					"request": {
+						"url": "http://localhost:5200/api/drivers/1/rides/1/cancel",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] Pickup a Customer",
+					"request": {
+						"url": "http://localhost:5200/api/drivers/1/rides/1",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "[DRIVER] Rate a Customer",
+					"request": {
+						"url": "http://localhost:5200/api/drivers/1/rides/1/rate",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"grade\": 3.23\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"description": "",
+			"item": [
+				{
+					"name": "[ORDER] Get Orders",
+					"request": {
+						"url": {
+							"raw": "http://localhost:5300/api/orders?limit=100&offset=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5300",
+							"path": [
+								"api",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "100",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"comments\": \"Driver was ugly.\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
