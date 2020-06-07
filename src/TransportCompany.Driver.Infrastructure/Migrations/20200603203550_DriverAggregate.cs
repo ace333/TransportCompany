@@ -57,7 +57,9 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                     UpdatedDate = table.Column<DateTime>(nullable: true),
                     CustomerId = table.Column<int>(nullable: false),
                     CustomerDetails_Name = table.Column<string>(maxLength: 64, nullable: true),
+                    CustomerDetails_Surname = table.Column<string>(maxLength: 64, nullable: true),
                     CustomerDetails_PhoneNumber = table.Column<string>(maxLength: 64, nullable: true),
+                    CustomerDetails_Email = table.Column<string>(maxLength: 64, nullable: true),
                     CustomerDetails_Grade = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     StartPoint_Street = table.Column<string>(maxLength: 64, nullable: true),
                     StartPoint_HouseNumber = table.Column<string>(maxLength: 64, nullable: true),
@@ -90,7 +92,9 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                     Income_Amount = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     CustomerId = table.Column<int>(nullable: false),
                     CustomerDetails_Name = table.Column<string>(maxLength: 64, nullable: true),
+                    CustomerDetails_Surname = table.Column<string>(maxLength: 64, nullable: true),
                     CustomerDetails_PhoneNumber = table.Column<string>(maxLength: 64, nullable: true),
+                    CustomerDetails_Email = table.Column<string>(maxLength: 64, nullable: true),
                     CustomerDetails_Grade = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     Invoice_Name = table.Column<string>(maxLength: 255, nullable: true),
                     Invoice_CreatedDate = table.Column<DateTime>(nullable: true),
@@ -122,13 +126,19 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                     Address_State = table.Column<string>(maxLength: 64, nullable: true),
                     Address_Country = table.Column<string>(maxLength: 64, nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    Type = table.Column<int>(nullable: false),
                     UpdatedDate = table.Column<DateTime>(nullable: true),
+                    PreviousPointId = table.Column<int>(nullable: true),
                     RideId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DestinationPoint", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DestinationPoint_DestinationPoint_PreviousPointId",
+                        column: x => x.PreviousPointId,
+                        principalTable: "DestinationPoint",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DestinationPoint_Ride_RideId",
                         column: x => x.RideId,
@@ -136,6 +146,11 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DestinationPoint_PreviousPointId",
+                table: "DestinationPoint",
+                column: "PreviousPointId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DestinationPoint_RideId",

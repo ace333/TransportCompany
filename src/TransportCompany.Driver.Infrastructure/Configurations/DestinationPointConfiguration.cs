@@ -11,13 +11,15 @@ namespace TransportCompany.Driver.Infrastructure.Configurations
             base.Configure(builder);
 
             builder.Property(x => x.Status);
-            builder.Property(x => x.Type);
-            builder.Property(x => x.UpdatedDate);
+            builder.Property(x => x.UpdatedDate)
+                .ValueGeneratedOnUpdate();
 
             builder.OwnsOne(x => x.Address, AddressConfiguration.Configure);
 
             builder.HasOne(x => x.Ride)
                 .WithMany(x => x.Stops);
+
+            builder.HasOne(x => x.PreviousPoint);
         }
     }
 }

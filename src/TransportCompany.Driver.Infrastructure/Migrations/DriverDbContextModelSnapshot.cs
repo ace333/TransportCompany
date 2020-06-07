@@ -30,19 +30,22 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("PreviousPointId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("RideId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedDate")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PreviousPointId");
 
                     b.HasIndex("RideId");
 
@@ -127,6 +130,10 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
 
             modelBuilder.Entity("TransportCompany.Driver.Domain.Entities.DestinationPoint", b =>
                 {
+                    b.HasOne("TransportCompany.Driver.Domain.Entities.DestinationPoint", "PreviousPoint")
+                        .WithMany()
+                        .HasForeignKey("PreviousPointId");
+
                     b.HasOne("TransportCompany.Driver.Domain.Entities.Ride", "Ride")
                         .WithMany("Stops")
                         .HasForeignKey("RideId")
@@ -403,7 +410,8 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<string>("Email")
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
 
                             b1.Property<decimal>("Grade")
                                 .HasColumnType("decimal(18, 2)");
@@ -417,7 +425,8 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                                 .HasMaxLength(64);
 
                             b1.Property<string>("Surname")
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
 
                             b1.HasKey("RideId");
 
@@ -571,7 +580,8 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<string>("Email")
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
 
                             b1.Property<decimal>("Grade")
                                 .HasColumnType("decimal(18, 2)");
@@ -585,7 +595,8 @@ namespace TransportCompany.Driver.Infrastructure.Migrations
                                 .HasMaxLength(64);
 
                             b1.Property<string>("Surname")
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(64)")
+                                .HasMaxLength(64);
 
                             b1.HasKey("RideRequestId");
 
