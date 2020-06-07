@@ -53,20 +53,6 @@ namespace TransportCompany.Customer.WebApi.Controllers
             await Mediator.Send(command);
         }
 
-        [HttpPost("{id}/route")]
-        public async Task AddRoute(int customerId, int id, [FromBody] AddRouteCommand command)
-        {
-            command.SetArguments(customerId, id);
-            await Mediator.Send(command);
-        }
-
-        [HttpDelete("{id}/route")]
-        public async Task DeleteRoute(int customerId, int id, [FromBody] DeleteRouteCommand command)
-        {
-            command.SetArguments(customerId, id);
-            await Mediator.Send(command);
-        }
-
         [HttpPost("{id}/rate")]
         public async Task RateDriver(int customerId, int id, [FromBody] RateDriverCommand command)
         {
