@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,9 +28,17 @@ namespace TransportCompany.Customer.Application.Query
             return _unitOfWork.RideRepository.GetAllCompletedRidesByDriverId(request.Id)
                 .Select(x => new DriverRidesQueryDto
                 {
-                    Stops = _mapper.Map<List<AddressDto>>(x.Stops),
+                    Destination = _mapper.Map<AddressDto>(x.Stops
+                        .OrderByDescending(y => y.UpdatedDate)
+                        .FirstOrDefault().Address
+                    ),
+                    StartPoint = _mapper.Map<AddressDto>(x.Stops
+                        .SingleOrDefault(y => y.PreviousPoint == null)
+                        .Address
+                    ),
                     CustomerDetails = _mapper.Map<CustomerDetailsDto>(x.CustomerDetails),
-                    Income = _mapper.Map<MoneyDto>(x.Income)
+                    Income = _mapper.Map<MoneyDto>(x.Income),
+                    Status = x.Status
                 })
                 .AsPaginatedList(request.GetPagingElements());
         }

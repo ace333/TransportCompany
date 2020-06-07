@@ -2,7 +2,7 @@
 {
     public sealed class CarDto
     {
-        public string CarModel { get; set; }
-        public string CarRegistrationPlateNumber { get; set; }
+        public string Model { get; set; }
+        public string RegistrationPlateNumber { get; set; }
     }
 }

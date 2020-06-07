@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TransportCompany.Driver.Domain.Enums;
 using TransportCompany.Shared.Application.Dto;
 
 namespace TransportCompany.Driver.Application.Dto.Base
@@ -8,17 +9,17 @@ namespace TransportCompany.Driver.Application.Dto.Base
     {
         protected DriverRideDetailsBaseDto() { }
 
-        protected DriverRideDetailsBaseDto(IReadOnlyCollection<AddressDto> stops,
-            MoneyDto income,
-            CustomerDetailsDto customerDetails)
-        {
-            Stops = stops;
+        protected DriverRideDetailsBaseDto(MoneyDto income,
+            CustomerDetailsDto customerDetails,
+            RideStatus status)
+        {            
             Income = income;
-            CustomerDetails = customerDetails;            
+            CustomerDetails = customerDetails;
+            Status = status;
         }
 
         public CustomerDetailsDto CustomerDetails { get; set; }
         public MoneyDto Income { get; set; }
-        public IReadOnlyCollection<AddressDto> Stops { get; set; }        
+        public RideStatus Status { get; set; }
     }
 }

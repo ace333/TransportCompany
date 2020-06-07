@@ -20,7 +20,7 @@ namespace TransportCompany.Driver.Application.Consumers
         public async Task Consume(ConsumeContext<IDriverRated> context)
         {
             var message = context.Message;
-            var driver = await _unitOfWork.DriverRepository.FindAsync(message.DriverId);
+            var driver = await _unitOfWork.DriverRepository.GetDriverWithRides(message.DriverId);
 
             _driverService.RecalculateDriversGrade(driver, message.Grade);
             await _unitOfWork.CommitAsync();
