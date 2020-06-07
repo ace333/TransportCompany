@@ -1,23 +1,21 @@
-﻿using System.Collections.Generic;
-using TransportCompany.Shared.Domain.Base;
+﻿using TransportCompany.Shared.Domain.Base;
 using TransportCompany.Shared.Domain.ValueObjects;
 
 namespace TransportCompany.Customer.Domain.Entities
 {
     public class Route: Entity
     {
-        public Route(Address startPoint, Address destination)
+        public Route(Address destinationPoint, Route previousRoute = null)
         {
-            StartPoint = startPoint;
-            Destination = destination;
+            DestinationPoint = destinationPoint;
+            PreviousRoute = previousRoute;
         }
 
         protected Route() { }
 
-        public Address StartPoint { get; set; }
-        public Address Destination { get; set; }
-        public Ride Ride { get; set; }
+        public Address DestinationPoint { get; set; }
+        public Route PreviousRoute { get; set; }
 
-        public IEnumerable<Address> GetAddresses => new Address[] {StartPoint, Destination};
+        public Ride Ride { get; set; }
     }
 }

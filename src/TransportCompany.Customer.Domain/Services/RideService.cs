@@ -1,5 +1,5 @@
-﻿using TransportCompany.Customer.Domain.Entities;
-using TransportCompany.Customer.Domain.ValueObjects;
+﻿using System.Linq;
+using TransportCompany.Customer.Domain.Entities;
 using TransportCompany.Shared.Domain.ValueObjects;
 
 namespace TransportCompany.Customer.Domain.Services
@@ -15,26 +15,42 @@ namespace TransportCompany.Customer.Domain.Services
 
         public Ride CreateRide(Money price, int driverId, DriverDetails driverDetails, Address startPoint, Address destination)
         {
-            var route = _routeService.CreateRoute(startPoint, destination);
-            return new Ride(price, driverId, driverDetails, route);
+            var startRoute = _routeService.CreateRoute(startPoint);
+            var destinationRoute = _routeService.CreateRoute(destination, startRoute);
+            return new Ride(price, driverId, driverDetails, startRoute, destinationRoute);
         }
 
-        public void AddRoute(Ride ride, Route route)
+        public void AddRoute(Ride ride, Address startPoint, Address destination)
         {
-            var routeToRecalculate = _routeService.GetRouteByStartPoint(ride.Routes, route.StartPoint);
+            var routeMatchedByStartPoint = ride.Routes.SingleOrDefault(x => x.DestinationPoint == startPoint);
+            var routeToUpdate = ride.Routes.SingleOrDefault(x => x.PreviousRoute == routeMatchedByStartPoint);
 
-            var newRoute = _routeService.CreateRoute(route.Destination, routeToRecalculate.Destination);
-            _routeService.ChangeRouteProperties(routeToRecalculate, destination: route.Destination);
+            var newRoute = _routeService.CreateRoute(destination, routeMatchedByStartPoint);
+            routeToUpdate.PreviousRoute = newRoute;
 
             ride.AddRoute(newRoute);
+        }       
+
+        public Route AddRoute(Ride ride, int previousRouteId, Address destination)
+        {
+            var previousRoute = ride.Routes.SingleOrDefault(x => x.Id == previousRouteId);
+            var routeToUpdate = ride.Routes.SingleOrDefault(x => x.PreviousRoute == previousRoute);
+
+            var newRoute = _routeService.CreateRoute(destination, previousRoute);
+            routeToUpdate.PreviousRoute = newRoute;
+
+            ride.AddRoute(newRoute);
+            return newRoute;
         }
 
-        public void RemoveRoute(Ride ride, Route routeToDelete)
+        public Route RemoveRoute(Ride ride, int routeId)
         {
-            var routeWithStartPointChange = _routeService.GetRouteByStartPoint(ride.Routes, routeToDelete.Destination);            
+            var routeToDelete = ride.Routes.SingleOrDefault(x => x.Id == routeId);
+            var nextRoute = ride.Routes.SingleOrDefault(x => x.PreviousRoute == routeToDelete);
 
-            _routeService.ChangeRouteProperties(routeWithStartPointChange, destination: routeToDelete.StartPoint);
+            nextRoute.PreviousRoute = routeToDelete.PreviousRoute;
             ride.RemoveRoute(routeToDelete);
+            return routeToDelete;
         }
     }
 }
