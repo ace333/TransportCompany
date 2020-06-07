@@ -45,6 +45,8 @@ namespace TransportCompany.Customer.Domain.Entities
             Rides.Add(ride);
         }
 
+        public void AddPaymentMethod(PaymentMethod method) => PaymentMethods.Add(method);
+        public void RemovePaymentMethod(PaymentMethod method) => PaymentMethods.Remove(method);
         public PaymentMethod GetPrefferedPaymentMethod() => PaymentMethods.SingleOrDefault(x => x.IsPreffered);
 
         public void UpdateGrade(decimal grade) => SystemInfo.Grade = grade;
