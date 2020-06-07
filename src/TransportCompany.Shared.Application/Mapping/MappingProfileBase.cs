@@ -17,10 +17,7 @@ namespace TransportCompany.Shared.Application.Mapping
             CreateMap<InvoiceDto, Invoice>();
             CreateMap<Invoice, InvoiceDto>();
 
-            CreateMap<CustomerDetailsDto, CustomerDetails>();
             CreateMap<CustomerDetails, CustomerDetailsDto>();
-
-            CreateMap<DriverDetailsDto, DriverDetails>();
             CreateMap<DriverDetails, DriverDetailsDto>();
         }
     }
