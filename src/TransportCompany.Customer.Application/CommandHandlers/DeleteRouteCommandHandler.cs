@@ -30,12 +30,9 @@ namespace TransportCompany.Customer.Application.CommandHandlers
             var ride = customer.Rides.SingleOrDefault(x => x.Id == request.Id);
             Fail.IfNull(ride, request.Id);
 
-            var routeToDelete = ride.GetRoute(request.RouteId);
-            Fail.IfNull(routeToDelete, request.RouteId);
+            var deletedRoute = _rideService.RemoveRoute(ride, request.RouteId);
 
-            _rideService.RemoveRoute(ride, routeToDelete);
-            customer.AddDomainEvent(new RouteDeleted(ride.DriverId, routeToDelete.StartPoint));
-
+            customer.AddDomainEvent(new RouteDeleted(ride.DriverId, deletedRoute.DestinationPoint));
             await _unitOfWork.CommitAsync();
 
             return Unit.Value;

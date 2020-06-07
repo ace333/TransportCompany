@@ -5,6 +5,7 @@ using AutoMapper;
 using TransportCompany.Customer.Application.Dto;
 using TransportCompany.Customer.Application.Mapping;
 using TransportCompany.Customer.Application.Query;
+using TransportCompany.Customer.Domain.Extensions;
 using TransportCompany.Customer.Infrastructure.Persistence;
 using TransportCompany.Shared.Application.Dto;
 using TransportCompany.Shared.Application.Query;
@@ -32,15 +33,12 @@ namespace TransportCompany.Customer.Application.QueryHandlers
             var ride = customer.Rides.SingleOrDefault(x => x.Id == request.Id);
             Fail.IfNull(ride, request.Id);
 
-            var moneyDto = _mapper.Map<MoneyDto>(ride.Price);
-            var driverDetailsDto = _mapper.Map<DriverDetailsDto>(ride.DriverDetails);
-
             return new CustomerRideDetailsQueryDto(
-                _mapper.MapRoutes(ride.Routes), 
+                _mapper.MapRoutes(ride.Routes.OrderFromStart()), 
                 ride.Status,
-                moneyDto, 
+                 _mapper.Map<MoneyDto>(ride.Price), 
                 ride.FinishedDate,
-                driverDetailsDto);
+                _mapper.Map<DriverDetailsDto>(ride.DriverDetails));
         }
     }
 }

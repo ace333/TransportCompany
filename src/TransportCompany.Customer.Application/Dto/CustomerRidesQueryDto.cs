@@ -5,6 +5,8 @@ namespace TransportCompany.Customer.Application.Dto
 {
     public sealed class CustomerRidesQueryDto : CustomerRideDetailsDtoBase
     {
-        public DateTime FinishedDate { get; set; }
+        public int Id { get; set; }
+        public DateTime? FinishedDate { get; set; }
+        public string CarModel { get; set; }
     }
 }

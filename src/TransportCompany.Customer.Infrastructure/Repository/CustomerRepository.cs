@@ -42,14 +42,22 @@ namespace TransportCompany.Customer.Infrastructure.Repository
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<TCustomer> GetCustomerWithPaymentMethods(int id)
+        {
+            return await _customerDbContext.Customers
+               .Include(x => x.PaymentMethods)
+               .Where(x => x.Id == id)
+               .SingleOrDefaultAsync();
+        }
+
         public async Task<TCustomer> GetCustomerWithRidesAndPaymentMethods(int id)
         {
             return await _customerDbContext.Customers
-               .Include(x => x.Rides)
-                   .ThenInclude(y => y.Routes)
+                .Include(x => x.Rides)
+                    .ThenInclude(x => x.Routes) 
                 .Include(x => x.PaymentMethods)
-               .Where(x => x.Id == id)
-               .SingleOrDefaultAsync();
+                .Where(x => x.Id == id)
+                .SingleOrDefaultAsync();
         }
     }
 }

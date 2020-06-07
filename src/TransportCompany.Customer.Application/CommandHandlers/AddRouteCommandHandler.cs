@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using TransportCompany.Customer.Application.Command;
-using TransportCompany.Customer.Domain.Entities;
 using TransportCompany.Customer.Domain.Events;
 using TransportCompany.Customer.Domain.Services;
 using TransportCompany.Customer.Infrastructure.Persistence;
@@ -36,15 +35,14 @@ namespace TransportCompany.Customer.Application.CommandHandlers
 
             var ride = customer.Rides.SingleOrDefault(x => x.Id == request.Id);
             Fail.IfNull(ride, request.Id);
-
-            var startPointAddress = _mapper.Map<Address>(request.StartPoint);
+            
             var destinationPointAddress = _mapper.Map<Address>(request.DestinationPoint);
 
-            _rideService.AddRoute(ride, new Route(startPointAddress, destinationPointAddress));
-            customer.AddDomainEvent(new RouteAdded(ride.DriverId, startPointAddress, destinationPointAddress));
+            var addedRoute = _rideService.AddRoute(ride, request.PreviousRouteId, destinationPointAddress);
+            customer.AddDomainEvent(
+                new RouteAdded(ride.DriverId, addedRoute.PreviousRoute.DestinationPoint, destinationPointAddress));
 
             await _unitOfWork.CommitAsync();
-
             return Unit.Value;
         }
     }

@@ -6,6 +6,7 @@ using TransportCompany.Customer.Application.Command;
 using TransportCompany.Customer.Domain.Events;
 using TransportCompany.Customer.Infrastructure.Persistence;
 using TransportCompany.Shared.Application.Command;
+using TransportCompany.Shared.Application.Utils;
 using TransportCompany.Shared.Domain.ValueObjects;
 
 namespace TransportCompany.Customer.Application.CommandHandlers
@@ -24,6 +25,8 @@ namespace TransportCompany.Customer.Application.CommandHandlers
         public async Task<Unit> Handle(RequestRideCommand request, CancellationToken cancellationToken)
         {
             var customer = await _unitOfWork.CustomerRepository.FindAsync(request.Id);
+            Fail.IfNull(customer, request.Id);            
+
             customer.AddDomainEvent(new RideRequested(
                 customer.Id,
                 _mapper.Map<CustomerDetails>(customer),

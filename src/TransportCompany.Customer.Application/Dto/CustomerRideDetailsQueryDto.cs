@@ -8,15 +8,20 @@ namespace TransportCompany.Customer.Application.Dto
 {
     public sealed class CustomerRideDetailsQueryDto : CustomerRideDetailsDtoBase
     {
-        public CustomerRideDetailsQueryDto(IReadOnlyCollection<AddressDto> routes,
+        public CustomerRideDetailsQueryDto(
+            IReadOnlyCollection<RouteDto> routes,
             RideStatus status,
             MoneyDto price,
             DateTime? finishedDate, 
-            DriverDetailsDto driverDetails) : base(routes, status, price, driverDetails)
+            DriverDetailsDto driverDetails) : base(status, price)
         {
+            Routes = routes;
             FinishedDate = finishedDate;
+            DriverDetails = driverDetails;
         }
 
         public DateTime? FinishedDate { get; set; }
+        public DriverDetailsDto DriverDetails { get; set; }
+        public IReadOnlyCollection<RouteDto> Routes { get; set; }
     }
 }

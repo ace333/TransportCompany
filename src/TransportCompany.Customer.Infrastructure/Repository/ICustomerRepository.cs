@@ -8,6 +8,7 @@ namespace TransportCompany.Customer.Infrastructure.Repository
     {
         Task<byte[]> GetCustomerPhotoById(int id);
         Task<TCustomer> GetCustomerWithRides(int id);
+        Task<TCustomer> GetCustomerWithPaymentMethods(int id);
         Task<TCustomer> GetCustomerWithRidesAndPaymentMethods(int id);
         Task<TCustomer> GetCustomerWithFavoriteAddresses(int id);
     }

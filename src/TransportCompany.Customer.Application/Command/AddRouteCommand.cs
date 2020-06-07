@@ -7,7 +7,7 @@ namespace TransportCompany.Customer.Application.Command
 {
     public sealed class AddRouteCommand : CustomerBaseCommand, ICommand
     {
-        public AddressDto StartPoint { get; set; }
+        public int PreviousRouteId { get; set; }
         public AddressDto DestinationPoint { get; set; }
     }
 }

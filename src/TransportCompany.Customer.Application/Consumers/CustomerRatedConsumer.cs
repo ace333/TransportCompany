@@ -21,7 +21,7 @@ namespace TransportCompany.Customer.Application.Consumers
         public async Task Consume(ConsumeContext<ICustomerRated> context)
         {
             var message = context.Message;
-            var customer = await _unitOfWork.CustomerRepository.FindAsync(message.CustomerId);
+            var customer = await _unitOfWork.CustomerRepository.GetCustomerWithRides(message.CustomerId);
             Fail.IfNull(customer, message.CustomerId);
 
             _customerService.RecalculateCustomerGrade(customer, message.Grade);
