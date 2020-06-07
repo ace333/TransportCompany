@@ -45,6 +45,7 @@ namespace TransportCompany.Order.Application.Consumers
                 message.CustomerId,
                 message.DriverId,
                 money, 
+                message.CustomerDetails,
                 message.DriverDetails,
                 message.StartPoint,
                 message.DestinationPoint));

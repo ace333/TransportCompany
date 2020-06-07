@@ -8,6 +8,7 @@ namespace TransportCompany.Order.Domain.Events
         public OrderCreated(int customerId, 
             int driverId,
             Money price, 
+            CustomerDetails customerDetails,
             DriverDetails driverDetails,
             Address startPoint,
             Address destination)
@@ -15,6 +16,7 @@ namespace TransportCompany.Order.Domain.Events
             CustomerId = customerId;
             DriverId = driverId;
             Price = price;
+            CustomerDetails = customerDetails;
             DriverDetails = driverDetails;
             StartPoint = startPoint;
             Destination = destination;
