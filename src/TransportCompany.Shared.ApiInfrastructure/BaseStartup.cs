@@ -40,7 +40,8 @@ namespace TransportCompany.Shared.ApiInfrastructure
                 builder.AddEnvironmentVariables();
 
             if (env.IsDevelopment())
-                builder.AddUserSecrets<TStartup>();
+                builder.AddJsonFile("appsettings.Development.json");
+
 
             _rabbitMqConfig = GetRabbitMqConfig();
             ConnectionString = GetConnectionString();
